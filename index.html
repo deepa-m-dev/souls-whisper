@@ -459,6 +459,30 @@
     color:var(--paper);
     font-weight:500;
   }
+  footer .byline{
+    font-family:var(--font-ui); font-size:.88rem;
+    color:rgba(233,211,180,.85);
+    margin:0 0 22px;
+  }
+  footer .byline strong{
+    color:var(--paper); font-weight:600;
+  }
+  .socials{
+    display:flex; gap:14px; justify-content:center;
+    margin:0 0 30px;
+  }
+  .socials a{
+    width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(233,211,180,.35);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold-soft);
+    transition:background .25s ease, color .25s ease, transform .25s ease, border-color .25s ease;
+  }
+  .socials a:hover{
+    background:var(--gold-soft); color:var(--wine-deep);
+    border-color:var(--gold-soft);
+    transform:translateY(-3px);
+  }
   footer .fine{
     font-family:var(--font-ui); font-size:.82rem;
     color:rgba(233,211,180,.7);
@@ -510,6 +534,59 @@
     .hero h1{ font-size:2.1rem; }
     .logo{ font-size:1.15rem; }
   }
+
+  /* ============ CUSTOM CURSOR ============ */
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0;
+    pointer-events:none; z-index:9999;
+    opacity:0;
+    will-change:transform;
+  }
+  .cursor-dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--wine);
+    transform:translate(-100px,-100px);
+    transition:opacity .2s ease;
+  }
+  .cursor-ring{
+    width:34px; height:34px; border-radius:50%;
+    border:1.5px solid var(--rose);
+    display:flex; align-items:center; justify-content:center;
+    transform:translate(-100px,-100px);
+    transition:width .25s ease, height .25s ease,
+               border-color .25s ease, background-color .25s ease, opacity .2s ease;
+  }
+  .cursor-ring::after{
+    content:"✦"; font-size:.68rem; color:var(--gold);
+    opacity:0; transition:opacity .2s ease;
+  }
+  body.has-custom-cursor .cursor-dot,
+  body.has-custom-cursor .cursor-ring{ opacity:1; }
+  .cursor-ring.hover{
+    width:58px; height:58px;
+    border-color:var(--gold);
+    background:rgba(196,107,125,.12);
+  }
+  .cursor-ring.hover::after{ opacity:1; }
+  .cursor-dot.hover{ opacity:0; }
+
+  .cursor-petal{
+    position:fixed; z-index:9998; pointer-events:none;
+    width:7px; height:9px;
+    background:linear-gradient(135deg, var(--blush), var(--rose));
+    border-radius:70% 5% 70% 5%;
+    transform:translate(-50%,-50%) rotate(15deg);
+    animation:petalTrail .9s ease-out forwards;
+  }
+  @keyframes petalTrail{
+    to{
+      transform:translate(calc(-50% + var(--drift)), calc(-50% + 46px)) rotate(200deg);
+      opacity:0;
+    }
+  }
+
+  body.has-custom-cursor, body.has-custom-cursor a, body.has-custom-cursor button,
+  body.has-custom-cursor .card, body.has-custom-cursor .tab{ cursor:none; }
 </style>
 </head>
 <body>
@@ -558,6 +635,21 @@
 
   <footer id="about">
     <p class="quote">"Every poem is a small mercy I give myself, then hand to you."</p>
+    <p class="byline">Written by <strong>Deepa M</strong></p>
+
+    <!-- Replace the href values below with your real profile links -->
+    <div class="socials">
+      <a href="https://instagram.com/deartbuff" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 0 1 1.77 1.15 4.9 4.9 0 0 1 1.15 1.77c.16.46.35 1.26.4 2.43.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.46.16-1.26.35-2.43.4-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.24-1.97.4-2.43a4.9 4.9 0 0 1 1.15-1.77A4.9 4.9 0 0 1 5.59 1.8c.46-.16 1.26-.35 2.43-.4C9.29 1.34 9.67 1.33 12.87 1.33M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.41-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/deepa-mofficial" target="_blank" rel="noopener" aria-label="linkedIn">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M18.9 2H22l-7.6 8.68L23.3 22H16.7l-5.2-6.65L5.5 22H2.4l8.1-9.26L1.3 2h6.8l4.7 6.1L18.9 2Zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20Z"/></svg>
+      </a>
+      <a href="mailto:deepamurugan2112@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h17A1.5 1.5 0 0 1 22 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-17A1.5 1.5 0 0 1 2 18.5v-13Zm2.2.5 7.8 6.24L19.8 6H4.2Zm15.8 1.68-7.4 5.93a1 1 0 0 1-1.2 0L4 7.68V18h16V7.68Z"/></svg>
+      </a>
+    </div>
+
     <p class="fine">Soul's Whisper — poems written when a feeling got too big to keep quiet · replace this line with your own words</p>
   </footer>
 
@@ -954,6 +1046,66 @@ drawOverlay.addEventListener("click", e => { if(e.target === drawOverlay) closeD
 document.addEventListener("keydown", e => {
   if(e.key === "Escape"){ closeModal(); closeDraw(); }
 });
+
+/* ---------- custom cursor (mouse devices only, respects reduced motion) ---------- */
+(function initCursor(){
+  const canHover = window.matchMedia("(pointer: fine) and (hover: hover)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(!canHover || reduceMotion) return;
+
+  document.body.classList.add("has-custom-cursor");
+
+  const dot = document.createElement("div"); dot.className = "cursor-dot";
+  const ring = document.createElement("div"); ring.className = "cursor-ring";
+  document.body.appendChild(dot);
+  document.body.appendChild(ring);
+
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let ringX = mouseX, ringY = mouseY;
+  let started = false;
+  let lastPetal = 0;
+
+  window.addEventListener("mousemove", e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%,-50%)`;
+    if(!started){ ringX = mouseX; ringY = mouseY; started = true; }
+
+    const now = performance.now();
+    if(now - lastPetal > 90){
+      lastPetal = now;
+      const petal = document.createElement("span");
+      petal.className = "cursor-petal";
+      petal.style.left = mouseX + "px";
+      petal.style.top = mouseY + "px";
+      petal.style.setProperty("--drift", (Math.random() * 26 - 13).toFixed(1) + "px");
+      document.body.appendChild(petal);
+      setTimeout(() => petal.remove(), 900);
+    }
+  });
+
+  /* smooth trailing ring: ease toward the cursor every frame, independent of mousemove firing rate */
+  function tick(){
+    ringX += (mouseX - ringX) * 0.16;
+    ringY += (mouseY - ringY) * 0.16;
+    ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%,-50%)`;
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  document.addEventListener("mouseover", e => {
+    if(e.target.closest("a, button, .card, .tab")){
+      ring.classList.add("hover"); dot.classList.add("hover");
+    }
+  });
+  document.addEventListener("mouseout", e => {
+    if(e.target.closest("a, button, .card, .tab")){
+      ring.classList.remove("hover"); dot.classList.remove("hover");
+    }
+  });
+
+  document.addEventListener("mouseleave", () => { dot.style.opacity = 0; ring.style.opacity = 0; });
+  document.addEventListener("mouseenter", () => { dot.style.opacity = ""; ring.style.opacity = ""; });
+})();
 </script>
 </body>
 </html>
