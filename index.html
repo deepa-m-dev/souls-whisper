@@ -118,6 +118,7 @@
     border-bottom:1px solid rgba(122,46,62,.1);
   }
   .nav{
+    position:relative;
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 32px;
     max-width:var(--container); margin:0 auto;
@@ -130,6 +131,15 @@
     letter-spacing:.01em;
   }
   .logo span{ color:var(--rose); }
+  .menu-toggle{
+    display:none;
+    background:none; border:1px solid rgba(122,46,62,.2);
+    border-radius:8px;
+    width:40px; height:40px;
+    font-size:1.15rem;
+    color:var(--wine-deep);
+    cursor:pointer;
+  }
   .nav-links{
     display:flex; gap:32px;
     font-family:var(--font-ui);
@@ -168,7 +178,7 @@
     max-width:640px;
     font-family:var(--font-body);
     font-style:italic;
-    font-size:1.25rem;
+    font-size:clamp(.95rem, 3.4vw, 1.25rem);
     color:var(--ink-soft);
     white-space:nowrap;
     overflow:hidden;
@@ -231,8 +241,8 @@
   .grid{
     max-width:var(--container); margin:0 auto;
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
-    gap:28px;
+    grid-template-columns:repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+    gap:24px;
   }
   .card{
     position:relative;
@@ -454,10 +464,51 @@
     color:rgba(233,211,180,.7);
   }
 
+  @media (max-width:900px){
+    .wrap, .nav, .hero, .genre-nav, .grid-section{ padding-left:24px; padding-right:24px; }
+  }
+
   @media (max-width:640px){
-    .nav-links{ display:none; }
-    .hero{ padding:90px 24px 60px; }
-    .modal{ padding:40px 26px 34px; }
+    .menu-toggle{ display:block; }
+    .nav-links{
+      display:none;
+      position:absolute; top:calc(100% + 1px); left:0; right:0;
+      flex-direction:column; gap:0;
+      background:var(--paper);
+      border-bottom:1px solid rgba(122,46,62,.1);
+      box-shadow:0 12px 20px rgba(91,64,72,.08);
+      padding:6px 24px 14px;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-links a{ padding:13px 0; border-bottom:1px solid rgba(122,46,62,.08); }
+    .nav-links a::after{ display:none; }
+
+    .hero{ padding:64px 20px 48px; }
+    .hero-actions{ flex-direction:column; align-items:stretch; }
+    .hero-actions .btn{ text-align:center; }
+
+    .genre-nav{ padding:0 20px 36px; justify-content:flex-start; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; }
+    .tab{ flex:0 0 auto; }
+
+    .grid-section{ padding:0 20px 70px; }
+    .grid{ grid-template-columns:1fr; gap:20px; }
+    .card{ padding:26px 22px 22px; }
+
+    .modal{ padding:36px 22px 30px; border-radius:10px; }
+    .modal h2{ font-size:1.6rem; }
+    .modal .body-text{ font-size:1.05rem; }
+
+    .draw-card-inner{ min-height:360px; }
+    .draw-face{ padding:32px 24px; }
+    .draw-close{ top:-42px; }
+
+    footer{ padding:56px 22px 32px; }
+    footer .quote{ font-size:1.2rem; }
+  }
+
+  @media (max-width:400px){
+    .hero h1{ font-size:2.1rem; }
+    .logo{ font-size:1.15rem; }
   }
 </style>
 </head>
@@ -472,7 +523,8 @@
   <header>
     <div class="nav">
       <div class="logo">Soul's <span>Whisper</span></div>
-      <nav class="nav-links">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      <nav class="nav-links" id="navLinks">
         <a href="#home">Home</a>
         <a href="#genres">Genres</a>
         <a href="#poems">Collection</a>
@@ -849,6 +901,22 @@ function closeModal(){
   document.body.style.overflow = "";
 }
 modalOverlay.addEventListener("click", e => { if(e.target === modalOverlay) closeModal(); });
+
+/* ---------- mobile menu ---------- */
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
+menuToggle.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("open");
+  menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  menuToggle.textContent = open ? "✕" : "☰";
+});
+navLinks.querySelectorAll("a").forEach(a => {
+  a.addEventListener("click", () => {
+    navLinks.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.textContent = "☰";
+  });
+});
 
 /* ---------- draw a verse ---------- */
 const drawOverlay = document.getElementById("drawOverlay");
