@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soul's Whisper — A Collection of Poems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --paper:      #FBF3EF;
+    --paper-alt:  #F6E1E6;
+    --paper-deep: #F0D3D9;
+    --ink:        #2B1820;
+    --ink-soft:   #5B4048;
+    --wine:       #7A2E3E;
+    --wine-deep:  #5C2130;
+    --rose:       #C46B7D;
+    --blush:      #F2B8C6;
+    --gold:       #B98B5E;
+    --gold-soft:  #E9D3B4;
+
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Newsreader', serif;
+    --font-ui: 'Inter', sans-serif;
+
+    --container: 1180px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* paper grain overlay */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:9000;
+    pointer-events:none;
+    opacity:.035;
+    mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--blush); color:var(--wine-deep); }
+
+  h1,h2,h3{ font-family:var(--font-display); margin:0; font-weight:600; color:var(--wine-deep); }
+
+  .eyebrow{
+    font-family:var(--font-ui);
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--rose);
+  }
+
+  .wrap{ max-width:var(--container); margin:0 auto; padding:0 32px; }
+
+  /* ============ PETALS (ambient motion) ============ */
+  .petal-field{
+    position:fixed; inset:0; z-index:1;
+    pointer-events:none; overflow:hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-40px;
+    width:14px; height:18px;
+    background:linear-gradient(135deg, var(--blush), var(--rose));
+    border-radius:70% 5% 70% 5%;
+    opacity:.55;
+    animation:fall linear infinite, sway ease-in-out infinite;
+    filter:drop-shadow(0 2px 2px rgba(122,46,62,.08));
+  }
+  .petal:nth-of-type(1){ left:4%;  width:10px; height:13px; animation-duration:19s, 4s; animation-delay:0s, 0s; }
+  .petal:nth-of-type(2){ left:14%; width:16px; height:20px; animation-duration:24s, 5s; animation-delay:2s, .5s; }
+  .petal:nth-of-type(3){ left:23%; width:9px;  height:12px; animation-duration:17s, 3.5s; animation-delay:5s, 1s; }
+  .petal:nth-of-type(4){ left:34%; width:14px; height:18px; animation-duration:22s, 6s; animation-delay:1s, 1.5s; }
+  .petal:nth-of-type(5){ left:46%; width:11px; height:14px; animation-duration:20s, 4.5s; animation-delay:7s, 0s; }
+  .petal:nth-of-type(6){ left:58%; width:17px; height:21px; animation-duration:26s, 5.5s; animation-delay:3s, 2s; }
+  .petal:nth-of-type(7){ left:67%; width:10px; height:13px; animation-duration:18s, 4s; animation-delay:6s, .8s; }
+  .petal:nth-of-type(8){ left:77%; width:15px; height:19px; animation-duration:23s, 5s; animation-delay:0s, 1.2s; }
+  .petal:nth-of-type(9){ left:87%; width:12px; height:15px; animation-duration:21s, 4.2s; animation-delay:4s, .3s; }
+  .petal:nth-of-type(10){left:94%; width:9px;  height:12px; animation-duration:16s, 3.8s; animation-delay:8s, 1.6s; }
+
+  @keyframes fall{
+    to{ transform:translateY(105vh); }
+  }
+  @keyframes sway{
+    0%,100%{ margin-left:0; }
+    50%{ margin-left:26px; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .petal{ animation:none; opacity:.25; top:20%; }
+    *{ scroll-behavior:auto !important; }
+  }
+
+  /* ============ HEADER ============ */
+  header{
+    position:sticky; top:0; z-index:500;
+    background:rgba(251,243,239,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(122,46,62,.1);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    max-width:var(--container); margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-size:1.35rem;
+    font-weight:600;
+    color:var(--wine-deep);
+    letter-spacing:.01em;
+  }
+  .logo span{ color:var(--rose); }
+  .nav-links{
+    display:flex; gap:32px;
+    font-family:var(--font-ui);
+    font-size:.88rem;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+  .nav-links a{ position:relative; padding-bottom:4px; transition:color .25s; }
+  .nav-links a:hover{ color:var(--wine); }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; height:1px; width:0;
+    background:var(--rose); transition:width .3s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; z-index:2;
+    padding:120px 32px 90px;
+    text-align:center;
+  }
+  .hero .eyebrow{ display:block; margin-bottom:18px; }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 5rem);
+    line-height:1.05;
+    font-variation-settings:"opsz" 90;
+    max-width:900px; margin:0 auto;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--rose);
+    font-weight:500;
+  }
+  .ink-line{
+    margin:34px auto 0;
+    max-width:640px;
+    font-family:var(--font-body);
+    font-style:italic;
+    font-size:1.25rem;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    overflow:hidden;
+    border-right:2px solid var(--wine);
+    width:0;
+    animation:type 3.2s steps(44, end) 1s forwards, blink .8s step-end infinite 1s;
+  }
+  @keyframes type{ to{ width:37ch; } }
+  @keyframes blink{ 50%{ border-color:transparent; } }
+  @media (prefers-reduced-motion:reduce){
+    .ink-line{ width:37ch; border-right:none; animation:none; }
+  }
+
+  .hero-actions{
+    margin-top:46px;
+    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--font-ui);
+    font-weight:600; font-size:.92rem;
+    padding:14px 30px;
+    border-radius:999px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, background .25s;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{
+    background:var(--wine); color:var(--paper);
+    box-shadow:0 8px 20px rgba(122,46,62,.25);
+  }
+  .btn-primary:hover{ background:var(--wine-deep); box-shadow:0 12px 26px rgba(122,46,62,.32); }
+  .btn-ghost{
+    background:transparent; color:var(--wine); border-color:var(--rose);
+  }
+  .btn-ghost:hover{ background:var(--paper-alt); }
+
+  /* ============ GENRE TABS ============ */
+  .genre-nav{
+    position:relative; z-index:2;
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    padding:0 32px 50px;
+  }
+  .tab{
+    font-family:var(--font-ui); font-size:.85rem; font-weight:600;
+    padding:9px 20px; border-radius:999px;
+    background:var(--paper-alt);
+    color:var(--ink-soft);
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .tab:hover{ color:var(--wine); border-color:var(--rose); }
+  .tab.active{
+    background:var(--wine); color:var(--paper);
+  }
+
+  /* ============ POEM GRID ============ */
+  .grid-section{ position:relative; z-index:2; padding:0 32px 100px; }
+  .grid{
+    max-width:var(--container); margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    gap:28px;
+  }
+  .card{
+    position:relative;
+    background:var(--paper);
+    border:1px solid rgba(122,46,62,.12);
+    border-radius:4px 4px 2px 2px;
+    padding:32px 28px 28px;
+    cursor:pointer;
+    box-shadow:0 2px 10px rgba(91,64,72,.06);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+    opacity:0; transform:translateY(24px);
+  }
+  .card.in-view{ opacity:1; transform:translateY(0); }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 32px rgba(91,64,72,.16);
+  }
+  /* page-curl corner */
+  .card::after{
+    content:"";
+    position:absolute; right:0; bottom:0;
+    width:0; height:0;
+    border-style:solid;
+    border-width:0 0 22px 22px;
+    border-color:transparent transparent var(--paper-deep) transparent;
+    filter:drop-shadow(-1px -1px 2px rgba(91,64,72,.15));
+    transition:border-width .3s ease;
+  }
+  .card:hover::after{ border-width:0 0 34px 34px; }
+
+  .card .tag{
+    display:inline-block;
+    font-family:var(--font-ui); font-size:.68rem; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase;
+    color:var(--wine);
+    background:var(--blush);
+    padding:4px 12px; border-radius:999px;
+    margin-bottom:16px;
+  }
+  .card h3{
+    font-size:1.4rem; margin-bottom:12px; line-height:1.25;
+  }
+  .card p.excerpt{
+    font-style:italic; color:var(--ink-soft);
+    font-size:1.02rem; line-height:1.7;
+    margin:0 0 18px;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .card .meta{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-ui); font-size:.78rem; color:var(--rose);
+    font-weight:500;
+  }
+
+  /* ============ DRAW A VERSE (signature interaction) ============ */
+  .draw-overlay{
+    position:fixed; inset:0; z-index:800;
+    background:rgba(43,24,32,.55);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .35s ease;
+    padding:24px;
+  }
+  .draw-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .draw-card{
+    perspective:1400px;
+    width:min(440px, 100%);
+  }
+  .draw-card-inner{
+    position:relative;
+    width:100%; min-height:420px;
+    transform-style:preserve-3d;
+    transition:transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .draw-card-inner.flipped{ transform:rotateY(180deg); }
+
+  .draw-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:40px 32px;
+  }
+  .draw-front{
+    background:linear-gradient(160deg, var(--wine), var(--wine-deep));
+    color:var(--gold-soft);
+    box-shadow:0 25px 60px rgba(43,24,32,.4);
+  }
+  .draw-front .flourish{ font-size:2.6rem; margin-bottom:18px; }
+  .draw-front .hint{ font-family:var(--font-ui); font-size:.85rem; letter-spacing:.14em; text-transform:uppercase; opacity:.8; }
+
+  .draw-back{
+    background:var(--paper);
+    transform:rotateY(180deg);
+    box-shadow:0 25px 60px rgba(43,24,32,.35);
+    border:1px solid var(--gold-soft);
+  }
+  .draw-back .tag{
+    font-family:var(--font-ui); font-size:.68rem; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase;
+    color:var(--wine); background:var(--blush);
+    padding:4px 12px; border-radius:999px; margin-bottom:18px;
+  }
+  .draw-back h3{ font-size:1.55rem; margin-bottom:16px; }
+  .draw-back p{ font-style:italic; color:var(--ink-soft); line-height:1.75; margin-bottom:22px; }
+
+  .draw-close{
+    position:absolute; top:-46px; right:0;
+    font-family:var(--font-ui); color:var(--paper);
+    background:transparent; border:1px solid rgba(251,243,239,.5);
+    border-radius:999px; width:36px; height:36px;
+    cursor:pointer; font-size:1.1rem;
+  }
+
+  /* ============ POEM MODAL ============ */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:900;
+    background:rgba(43,24,32,.5);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:flex-start; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+    padding:70px 24px;
+    overflow-y:auto;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal{
+    background:var(--paper);
+    max-width:640px; width:100%;
+    border-radius:6px;
+    padding:52px 48px 48px;
+    position:relative;
+    box-shadow:0 30px 70px rgba(43,24,32,.35);
+    transform:translateY(18px) scale(.98);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .modal-overlay.open .modal{ transform:translateY(0) scale(1); }
+  .modal-close{
+    position:absolute; top:20px; right:24px;
+    background:none; border:none; font-size:1.4rem;
+    color:var(--rose); cursor:pointer;
+  }
+  .modal .tag{
+    font-family:var(--font-ui); font-size:.7rem; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase;
+    color:var(--wine); background:var(--blush);
+    padding:4px 12px; border-radius:999px;
+  }
+  .modal h2{ font-size:2rem; margin:18px 0 6px; }
+  .modal .divider{
+    width:64px; height:2px; background:var(--gold);
+    margin:22px 0 26px; border:none;
+  }
+  .modal .body-text{
+    font-family:var(--font-body); font-size:1.15rem; line-height:2;
+    white-space:pre-line; color:var(--ink);
+  }
+  .modal .signoff{
+    margin-top:30px; font-family:var(--font-ui); font-size:.85rem;
+    color:var(--rose); font-style:normal;
+  }
+
+  .explain-toggle{
+    margin-top:34px;
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-ui); font-size:.85rem; font-weight:600;
+    color:var(--wine);
+    background:var(--paper-alt);
+    border:1px dashed var(--rose);
+    padding:10px 18px; border-radius:999px;
+    cursor:pointer;
+    transition:background .25s ease;
+  }
+  .explain-toggle:hover{ background:var(--blush); }
+  .explain-toggle .chevron{ transition:transform .25s ease; font-size:.7rem; }
+  .explain-toggle.open .chevron{ transform:rotate(180deg); }
+
+  .explain-box{
+    max-height:0; overflow:hidden;
+    transition:max-height .4s ease, opacity .3s ease, margin-top .4s ease;
+    opacity:0;
+  }
+  .explain-box.open{
+    max-height:400px; opacity:1; margin-top:16px;
+  }
+  .explain-box .inner{
+    background:var(--paper-alt);
+    border-left:3px solid var(--gold);
+    border-radius:2px;
+    padding:18px 22px;
+    font-family:var(--font-ui);
+    font-size:.92rem;
+    line-height:1.7;
+    color:var(--ink-soft);
+  }
+  .explain-box .inner strong{ color:var(--wine-deep); }
+
+  /* ============ FOOTER ============ */
+  footer{
+    position:relative; z-index:2;
+    background:var(--wine-deep);
+    color:var(--gold-soft);
+    padding:70px 32px 40px;
+    text-align:center;
+  }
+  footer .quote{
+    font-family:var(--font-display);
+    font-style:italic;
+    font-size:1.5rem;
+    max-width:640px; margin:0 auto 28px;
+    color:var(--paper);
+    font-weight:500;
+  }
+  footer .fine{
+    font-family:var(--font-ui); font-size:.82rem;
+    color:rgba(233,211,180,.7);
+  }
+
+  @media (max-width:640px){
+    .nav-links{ display:none; }
+    .hero{ padding:90px 24px 60px; }
+    .modal{ padding:40px 26px 34px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="petal-field" aria-hidden="true">
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span>
+    <span class="petal"></span><span class="petal"></span><span class="petal"></span><span class="petal"></span>
+  </div>
+
+  <header>
+    <div class="nav">
+      <div class="logo">Soul's <span>Whisper</span></div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#genres">Genres</a>
+        <a href="#poems">Collection</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <span class="eyebrow">A poet's private garden, opened to you</span>
+    <h1>Words I kept <em>until</em><br>they were ready to bloom</h1>
+    <p class="ink-line">the heart writes in a language only quiet understands</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" id="drawBtn">Draw a Verse</button>
+      <a href="#poems" class="btn btn-ghost">Browse the Collection</a>
+    </div>
+  </section>
+
+  <nav class="genre-nav" id="genres">
+    <button class="tab active" data-genre="all">All Poems</button>
+    <button class="tab" data-genre="love">Love</button>
+    <button class="tab" data-genre="sad">Sad</button>
+    <button class="tab" data-genre="faith">Faith</button>
+    <button class="tab" data-genre="nature">Nature</button>
+    <button class="tab" data-genre="hope">Hope</button>
+  </nav>
+
+  <section class="grid-section" id="poems">
+    <div class="grid" id="poemGrid"></div>
+  </section>
+
+  <footer id="about">
+    <p class="quote">"Every poem is a small mercy I give myself, then hand to you."</p>
+    <p class="fine">Soul's Whisper — poems written when a feeling got too big to keep quiet · replace this line with your own words</p>
+  </footer>
+
+  <!-- Draw a Verse overlay -->
+  <div class="draw-overlay" id="drawOverlay">
+    <div class="draw-card">
+      <button class="draw-close" id="drawClose" aria-label="Close">✕</button>
+      <div class="draw-card-inner" id="drawInner">
+        <div class="draw-face draw-front">
+          <div class="flourish">✦</div>
+          <div class="hint">drawing your verse…</div>
+        </div>
+        <div class="draw-face draw-back" id="drawBack">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full poem modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+<script>
+/* ======================================================================
+   POEMS — replace the text below with your own. Keep the same structure:
+   id, genre (love | sad | faith | nature | hope), title, excerpt, body.
+   ====================================================================== */
+const poems = [
+  {
+    id:1, genre:"love", title:"Where You Are",
+    excerpt:"Home was never a place — it was the shape of your name in my mouth, the pause before I say it.",
+    body:`Home was never a place —
+it was the shape of your name in my mouth,
+the pause before I say it.
+
+I have lived in cities that forgot me
+and rooms that never learned my name,
+but you, you learned it in a single evening
+and have called me by it since.
+
+Wherever you are, I am already arriving.`,
+    note:"This poem reframes 'home' as a person rather than a place. The 'shape of your name in my mouth' suggests the speaker feels most themselves when saying the name of someone they love — belonging is portable when it's rooted in a relationship, not an address."
+  },
+  {
+    id:2, genre:"love", title:"First Light",
+    excerpt:"You wake like weather — soft, then suddenly everywhere, and I forget what the room looked like before you filled it.",
+    body:`You wake like weather —
+soft, then suddenly everywhere,
+and I forget what the room
+looked like before you filled it.
+
+Coffee goes cold on the sill.
+I don't mind.
+Some mornings are meant for watching
+someone else become themselves again.`,
+    note:"'You wake like weather' compares a loved one's presence to something atmospheric — you don't control it, you just notice the room change. The cold coffee is a small, deliberate detail: proof that watching someone matters more than the routine that gets interrupted."
+  },
+  {
+    id:3, genre:"love", title:"Quiet Hands",
+    excerpt:"Not every love is loud. Some of it is just two tired hands, deciding to hold on anyway.",
+    body:`Not every love is loud.
+Some of it is just
+two tired hands,
+deciding to hold on anyway.
+
+We are not the kind of story
+they write songs about —
+we are the kind that gets up,
+makes the tea,
+and stays.`,
+    note:"This poem pushes back against dramatic, movie-style love. Its argument is that the real evidence of love is unglamorous and repeated — showing up, doing small tasks, staying — not grand gestures."
+  },
+  {
+    id:4, genre:"sad", title:"The Empty Chair",
+    excerpt:"I set two plates from habit still, then remember, slowly, like a bruise arriving after the fall.",
+    body:`I set two plates from habit still,
+then remember, slowly,
+like a bruise arriving after the fall.
+
+The chair across from mine
+has learned to hold only silence now,
+and silence, it turns out,
+takes up exactly as much space as you did.
+
+I am learning to eat alone.
+I am not yet good at it.`,
+    note:"Grief here is shown through habit, not statement — setting two plates 'from habit' before remembering. The empty chair becomes a stand-in for the missing person, and the poem ends without resolution on purpose, because that's honest to how loss actually feels day to day."
+  },
+  {
+    id:5, genre:"sad", title:"Rain on Tuesday",
+    excerpt:"Grief doesn't knock. It just moves in on an ordinary Tuesday and rearranges all the furniture of you.",
+    body:`Grief doesn't knock.
+It just moves in
+on an ordinary Tuesday
+and rearranges all the furniture of you.
+
+I keep finding it
+in the shape of your coat on the hook,
+in the second toothbrush
+I still haven't thrown away.
+
+Some day I will.
+Today is not that day.`,
+    note:"The poem personifies grief as an uninvited houseguest who 'rearranges the furniture' — meaning ordinary objects (a coat, a toothbrush) suddenly carry emotional weight. Ending on 'today is not that day' is about giving yourself permission to heal at your own pace."
+  },
+  {
+    id:6, genre:"sad", title:"What the Silence Kept",
+    excerpt:"We were fluent once, in each other's smallest sounds. Now I flinch at how well I remember your voice.",
+    body:`We were fluent once,
+in each other's smallest sounds.
+Now I flinch at how well
+I remember your voice.
+
+Some conversations don't end.
+They just stop being spoken aloud
+and move in, instead,
+to the space behind my ribs.`,
+    note:"'Fluent in each other's smallest sounds' describes the intimacy of knowing someone so well you understand their unspoken cues. The poem suggests that after a relationship ends, that closeness doesn't disappear — it just has nowhere left to go, so it's carried internally instead."
+  },
+  {
+    id:7, genre:"faith", title:"Psalm for a Tired Heart",
+    excerpt:"I did not come with clean hands or a rehearsed prayer — only the ache, and the hope that You take both.",
+    body:`I did not come with clean hands
+or a rehearsed prayer —
+only the ache,
+and the hope that You take both.
+
+Teach me the kind of faith
+that doesn't need the storm to end
+before it starts to sing.
+
+I am tired, Lord.
+Sit with me anyway.`,
+    note:"This is written like a modern psalm — an honest, unpolished prayer rather than a formal one. The core idea is that faith isn't conditional on things getting better first; it's asking to be accompanied through hardship, not rescued from it immediately."
+  },
+  {
+    id:8, genre:"faith", title:"The Gardener",
+    excerpt:"He never asked the seed to hurry. He only asked it to stay buried long enough to believe in spring.",
+    body:`He never asked the seed to hurry.
+He only asked it
+to stay buried long enough
+to believe in spring.
+
+So I have stopped asking why
+the waiting is so dark,
+and started asking instead
+what is growing, unseen, in me.`,
+    note:"The 'gardener' is a stand-in for God, and the buried seed represents a person going through a hard, unclear season. The turn at the end — shifting from 'why is this happening' to 'what is this growing into' — is the poem's central message about trusting unseen progress."
+  },
+  {
+    id:9, genre:"faith", title:"Small Prayers",
+    excerpt:"Not every prayer needs an altar. Some are just a breath held at a red light, asking to be steadied.",
+    body:`Not every prayer needs an altar.
+Some are just a breath
+held at a red light,
+asking to be steadied.
+
+I have prayed in parking lots,
+in the two minutes before a hard call,
+in the quiet after slamming a door
+I wish I hadn't.
+
+He has never once
+asked for better circumstances
+to hear me.`,
+    note:"This poem argues that prayer doesn't need to be formal or eloquent to count. The everyday examples (a red light, a hard phone call) make the point that faith can live inside ordinary, imperfect moments — it doesn't wait for a church pew or the right words."
+  },
+  {
+    id:10, genre:"nature", title:"Riverlight",
+    excerpt:"The river doesn't rush to arrive. It only moves, certain the sea has always known its name.",
+    body:`The river doesn't rush to arrive.
+It only moves,
+certain the sea
+has always known its name.
+
+I want to learn that kind of patience —
+the water's easy faith
+that motion is enough,
+that the ocean will still be there
+when I finally reach it.`,
+    note:"The river is a metaphor for patient trust in a long process or goal. Instead of anxious striving, the poem admires the river's quiet confidence that steady movement — not urgency — is what eventually gets you where you're going."
+  },
+  {
+    id:11, genre:"nature", title:"Autumn's Ledger",
+    excerpt:"The trees let go before the frost forces them to. There is a lesson here I keep refusing to learn.",
+    body:`The trees let go
+before the frost forces them to.
+There is a lesson here
+I keep refusing to learn.
+
+Every leaf a small surrender,
+every branch a little lighter
+for having trusted the wind
+with what it could no longer hold.`,
+    note:"Trees dropping their leaves before winter forces them to is used as a model for letting go voluntarily rather than being forced to. The poem suggests there's relief, not just loss, in releasing what you no longer need to carry."
+  },
+  {
+    id:12, genre:"nature", title:"The Old Oak",
+    excerpt:"It has kept every storm a secret in its rings, and still it opens its arms wide each spring.",
+    body:`It has kept every storm
+a secret in its rings,
+and still it opens its arms
+wide each spring.
+
+I want to be made of that —
+a hundred winters deep
+and still unafraid
+to leaf out loud.`,
+    note:"The oak's rings — hidden records of every past storm — symbolize accumulated hardship that isn't visible from the outside. The poem's wish is to survive difficulty without becoming closed off, still capable of visibly 'blooming' again each season."
+  },
+  {
+    id:13, genre:"hope", title:"After the Storm Passes",
+    excerpt:"The sky always forgets to hold a grudge. By morning it is blue again, as if nothing tried to break it.",
+    body:`The sky always forgets
+to hold a grudge.
+By morning it is blue again,
+as if nothing tried to break it.
+
+Maybe that is the secret —
+not that the storm never comes,
+but that it never gets
+the last word.`,
+    note:"The sky returning to blue after a storm is a simple image for resilience. The key line — the storm never gets 'the last word' — reframes hope not as the absence of hard times, but as the certainty that hard times don't get to end the story."
+  },
+  {
+    id:14, genre:"hope", title:"Seeds",
+    excerpt:"I planted the smallest hope in the hardest month, just to see if anything of me still knew how to grow.",
+    body:`I planted the smallest hope
+in the hardest month,
+just to see if anything of me
+still knew how to grow.
+
+It did.
+Barely. Slowly.
+But it did.
+
+So I am telling you,
+in case no one has yet today —
+plant the small thing anyway.`,
+    note:"Planting a seed 'in the hardest month' is a metaphor for trying to hope again during a difficult period, even when it seems pointless. The direct address at the end turns the poem into encouragement for the reader, not just a personal reflection."
+  },
+  {
+    id:15, genre:"hope", title:"Morning Will Come",
+    excerpt:"However long the night insists on staying, it has never once won an argument with dawn.",
+    body:`However long the night insists on staying,
+it has never once
+won an argument with dawn.
+
+So hold on through the dark hours
+the way the horizon does —
+quietly, without proof,
+certain the light is already on its way.`,
+    note:"The night 'never wins an argument with dawn' is a way of saying difficult periods are temporary, even when they don't feel that way. The poem's advice is to hold on 'without proof' — to keep faith in better times before there's any visible evidence they're coming."
+  }
+];
+
+const genreLabels = { love:"Love", sad:"Sad", faith:"Faith", nature:"Nature", hope:"Hope" };
+const readTime = words => Math.max(1, Math.round(words / 40)) + " min read";
+
+/* ---------- render poem cards ---------- */
+const grid = document.getElementById("poemGrid");
+
+function renderCards(){
+  grid.innerHTML = "";
+  poems.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.dataset.genre = p.genre;
+    card.innerHTML = `
+      <span class="tag">${genreLabels[p.genre]}</span>
+      <h3>${p.title}</h3>
+      <p class="excerpt">${p.excerpt}</p>
+      <div class="meta"><span>${readTime(p.body.split(/\s+/).length)}</span><span>Read poem →</span></div>
+    `;
+    card.addEventListener("click", () => openModal(p));
+    grid.appendChild(card);
+  });
+  observeCards();
+}
+renderCards();
+
+/* ---------- scroll reveal ---------- */
+function observeCards(){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in-view"); io.unobserve(e.target); } });
+  }, { threshold:.15 });
+  document.querySelectorAll(".card").forEach(c => io.observe(c));
+}
+
+/* ---------- genre filter ---------- */
+const tabs = document.querySelectorAll(".tab");
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const genre = tab.dataset.genre;
+    document.querySelectorAll(".card").forEach(card => {
+      const show = genre === "all" || card.dataset.genre === genre;
+      card.style.display = show ? "" : "none";
+    });
+  });
+});
+
+/* ---------- poem modal ---------- */
+const modalOverlay = document.getElementById("modalOverlay");
+const modalContent = document.getElementById("modalContent");
+
+function openModal(p){
+  modalContent.innerHTML = `
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <span class="tag">${genreLabels[p.genre]}</span>
+    <h2>${p.title}</h2>
+    <hr class="divider">
+    <p class="body-text">${p.body}</p>
+    <p class="signoff">— from Soul's Whisper</p>
+    ${p.note ? `
+    <button class="explain-toggle" id="explainToggle">
+      <span class="chevron">▾</span> Stuck? See what this poem means
+    </button>
+    <div class="explain-box" id="explainBox">
+      <div class="inner"><strong>A quick read:</strong> ${p.note}</div>
+    </div>` : ``}
+  `;
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  const explainToggle = document.getElementById("explainToggle");
+  if(explainToggle){
+    explainToggle.addEventListener("click", () => {
+      explainToggle.classList.toggle("open");
+      document.getElementById("explainBox").classList.toggle("open");
+    });
+  }
+  modalOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal(){
+  modalOverlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+modalOverlay.addEventListener("click", e => { if(e.target === modalOverlay) closeModal(); });
+
+/* ---------- draw a verse ---------- */
+const drawOverlay = document.getElementById("drawOverlay");
+const drawInner = document.getElementById("drawInner");
+const drawBack = document.getElementById("drawBack");
+const drawBtn = document.getElementById("drawBtn");
+const drawClose = document.getElementById("drawClose");
+
+drawBtn.addEventListener("click", () => {
+  const p = poems[Math.floor(Math.random() * poems.length)];
+  drawBack.innerHTML = `
+    <span class="tag">${genreLabels[p.genre]}</span>
+    <h3>${p.title}</h3>
+    <p>${p.excerpt}</p>
+    <button class="btn btn-primary" id="drawReadFull">Read the full poem</button>
+  `;
+  drawInner.classList.remove("flipped");
+  drawOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => setTimeout(() => drawInner.classList.add("flipped"), 250));
+
+  setTimeout(() => {
+    const readBtn = document.getElementById("drawReadFull");
+    if(readBtn) readBtn.addEventListener("click", () => { closeDraw(); openModal(p); });
+  }, 300);
+});
+
+function closeDraw(){
+  drawOverlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+drawClose.addEventListener("click", closeDraw);
+drawOverlay.addEventListener("click", e => { if(e.target === drawOverlay) closeDraw(); });
+
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape"){ closeModal(); closeDraw(); }
+});
+</script>
+</body>
+</html>
