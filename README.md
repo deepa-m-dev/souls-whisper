@@ -2,7 +2,7 @@
 
 A personal collection of poems, written whenever a feeling got too big to keep quiet — sad, happy, or somewhere in between.
 
-**[View the live site →](#)** *(add your GitHub Pages link here once it's live)*
+**[View the live site →](https://deepa-m-dev.github.io/souls-whisper/)** 
 
 ## About
 
