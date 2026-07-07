@@ -760,8 +760,8 @@
     <button class="tab" data-genre="love">Love</button>
     <button class="tab" data-genre="melancholy">melancholy</button>
     <button class="tab" data-genre="faith">Faith</button>
-    <button class="tab" data-genre="nature">Nature</button>
-    <button class="tab" data-genre="hope">Hope</button>
+    <button class="tab" data-genre="Philosophical">Philosophical</button>
+    <button class="tab" data-genre="Introspective">Introspective</button>
   </nav>
 
   <section class="grid-section" id="poems">
@@ -855,7 +855,7 @@ const poems = [
     note: "This poem explores the hidden weight of emotional suffering behind a convincing smile. The speaker's greatest battle isn't with the outside world but with their own mind, portrayed as a prison filled with demons and monsters. The closing image—'the debris of my soul'—captures the feeling of being reduced to scattered fragments after a long struggle with despair."
   },
   {
-    id: 2, genre: "melancholy", title: "Duality",
+    id: 2, genre: "Introspective", title: "Duality",
     excerpt: "I'm neither an angel nor a monstrum.\nI'm both the offender and the victim.",
     body: "I'm neither an angel nor a monstrum.\nI'm both the offender and the victim.",
     note: "This brief poem explores the contradictions that exist within a person. By rejecting the extremes of pure innocence and pure evil, it acknowledges that people can carry both guilt and suffering at once. The use of 'monstrum' lends the poem a timeless, almost mythic quality, emphasizing the speaker's struggle with identity rather than morality."
@@ -1103,7 +1103,7 @@ let unsubscribeComments = null;
 let currentModalList = [];
 let currentModalIndex = -1;
 
-const genreLabels = { love:"Love", melancholy:"Melancholy", faith:"Faith", nature:"Nature", hope:"Hope" };
+const genreLabels = { love:"Love", melancholy:"Melancholy", faith:"Faith", Philosophical:"Philosophical", Introspective:"Introspective" };
 const readTime = words => Math.max(1, Math.round(words / 40)) + " min read";
 
 function escapeHtml(str){
