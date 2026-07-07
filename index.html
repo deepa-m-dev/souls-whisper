@@ -30,6 +30,20 @@
     --container: 1180px;
   }
 
+  html[data-theme="dark"]{
+    --paper:      #201217;
+    --paper-alt:  #2A171E;
+    --paper-deep: #33191F;
+    --ink:        #F3E6E9;
+    --ink-soft:   #C9AEB5;
+    --wine:       #D98BA0;
+    --wine-deep:  #F2B8C6;
+    --rose:       #E39BAC;
+    --blush:      #4A2530;
+    --gold:       #D9B183;
+    --gold-soft:  #5A4530;
+  }
+
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
 
@@ -41,9 +55,9 @@
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     position:relative;
+    transition:background .3s ease, color .3s ease;
   }
 
-  /* paper grain overlay */
   body::before{
     content:"";
     position:fixed;
@@ -71,7 +85,6 @@
 
   .wrap{ max-width:var(--container); margin:0 auto; padding:0 32px; }
 
-  /* ============ PETALS (ambient motion) ============ */
   .petal-field{
     position:fixed; inset:0; z-index:1;
     pointer-events:none; overflow:hidden;
@@ -97,31 +110,28 @@
   .petal:nth-of-type(9){ left:87%; width:12px; height:15px; animation-duration:21s, 4.2s; animation-delay:4s, .3s; }
   .petal:nth-of-type(10){left:94%; width:9px;  height:12px; animation-duration:16s, 3.8s; animation-delay:8s, 1.6s; }
 
-  @keyframes fall{
-    to{ transform:translateY(105vh); }
-  }
-  @keyframes sway{
-    0%,100%{ margin-left:0; }
-    50%{ margin-left:26px; }
-  }
+  @keyframes fall{ to{ transform:translateY(105vh); } }
+  @keyframes sway{ 0%,100%{ margin-left:0; } 50%{ margin-left:26px; } }
 
   @media (prefers-reduced-motion:reduce){
     .petal{ animation:none; opacity:.25; top:20%; }
     *{ scroll-behavior:auto !important; }
   }
 
-  /* ============ HEADER ============ */
   header{
     position:sticky; top:0; z-index:500;
     background:rgba(251,243,239,.86);
     backdrop-filter:blur(10px);
     border-bottom:1px solid rgba(122,46,62,.1);
+    transition:background .3s ease;
   }
+  html[data-theme="dark"] header{ background:rgba(32,18,23,.86); }
   .nav{
     position:relative;
     display:flex; align-items:center; justify-content:space-between;
     padding:18px 32px;
     max-width:var(--container); margin:0 auto;
+    gap:16px;
   }
   .logo{
     font-family:var(--font-display);
@@ -131,6 +141,7 @@
     letter-spacing:.01em;
   }
   .logo span{ color:var(--rose); }
+  .nav-right{ display:flex; align-items:center; gap:10px; }
   .menu-toggle{
     display:none;
     background:none; border:1px solid rgba(122,46,62,.2);
@@ -140,6 +151,17 @@
     color:var(--wine-deep);
     cursor:pointer;
   }
+  .theme-toggle{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(122,46,62,.2);
+    background:var(--paper-alt);
+    color:var(--wine-deep);
+    font-size:1rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:background .25s ease, transform .2s ease;
+  }
+  .theme-toggle:hover{ background:var(--blush); transform:translateY(-1px); }
   .nav-links{
     display:flex; gap:32px;
     font-family:var(--font-ui);
@@ -155,10 +177,9 @@
   }
   .nav-links a:hover::after{ width:100%; }
 
-  /* ============ HERO ============ */
   .hero{
     position:relative; z-index:2;
-    padding:120px 32px 90px;
+    padding:120px 32px 60px;
     text-align:center;
   }
   .hero .eyebrow{ display:block; margin-bottom:18px; }
@@ -168,11 +189,7 @@
     font-variation-settings:"opsz" 90;
     max-width:900px; margin:0 auto;
   }
-  .hero h1 em{
-    font-style:italic;
-    color:var(--rose);
-    font-weight:500;
-  }
+  .hero h1 em{ font-style:italic; color:var(--rose); font-weight:500; }
   .ink-line{
     margin:34px auto 0;
     max-width:640px;
@@ -192,10 +209,7 @@
     .ink-line{ width:37ch; border-right:none; animation:none; }
   }
 
-  .hero-actions{
-    margin-top:46px;
-    display:flex; gap:18px; justify-content:center; flex-wrap:wrap;
-  }
+  .hero-actions{ margin-top:46px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap; }
   .btn{
     font-family:var(--font-ui);
     font-weight:600; font-size:.92rem;
@@ -206,17 +220,51 @@
     transition:transform .25s ease, box-shadow .25s ease, background .25s;
   }
   .btn:hover{ transform:translateY(-2px); }
-  .btn-primary{
-    background:var(--wine); color:var(--paper);
-    box-shadow:0 8px 20px rgba(122,46,62,.25);
-  }
+  .btn-primary{ background:var(--wine); color:var(--paper); box-shadow:0 8px 20px rgba(122,46,62,.25); }
   .btn-primary:hover{ background:var(--wine-deep); box-shadow:0 12px 26px rgba(122,46,62,.32); }
-  .btn-ghost{
-    background:transparent; color:var(--wine); border-color:var(--rose);
-  }
+  .btn-ghost{ background:transparent; color:var(--wine); border-color:var(--rose); }
   .btn-ghost:hover{ background:var(--paper-alt); }
+  .btn-sm{ padding:9px 18px; font-size:.82rem; }
 
-  /* ============ GENRE TABS ============ */
+  .potd-wrap{ position:relative; z-index:2; padding:0 32px 50px; }
+  .potd{
+    max-width:820px; margin:0 auto;
+    background:linear-gradient(160deg, var(--wine), var(--wine-deep));
+    border-radius:16px;
+    padding:36px 40px;
+    color:var(--gold-soft);
+    box-shadow:0 20px 45px rgba(43,24,32,.25);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .potd .eyebrow{ color:var(--gold-soft); opacity:.85; }
+  .potd h3{ color:var(--paper); font-size:1.6rem; }
+  .potd p{ font-family:var(--font-body); font-style:italic; line-height:1.7; margin:0; opacity:.92; white-space:pre-line; }
+  .potd .btn{ align-self:flex-start; }
+
+  .controls-row{
+    position:relative; z-index:2;
+    max-width:var(--container); margin:0 auto;
+    padding:0 32px 20px;
+    display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:center;
+  }
+  .search-input{
+    font-family:var(--font-ui); font-size:.9rem;
+    padding:11px 18px;
+    border-radius:999px;
+    border:1px solid rgba(122,46,62,.2);
+    background:var(--paper-alt);
+    color:var(--ink);
+    min-width:240px; flex:1 1 240px; max-width:360px;
+  }
+  .search-input:focus{ outline:none; border-color:var(--rose); }
+  .sort-select{
+    font-family:var(--font-ui); font-size:.85rem; font-weight:600;
+    padding:10px 16px; border-radius:999px;
+    border:1px solid rgba(122,46,62,.2);
+    background:var(--paper-alt); color:var(--ink-soft);
+    cursor:pointer;
+  }
+
   .genre-nav{
     position:relative; z-index:2;
     display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
@@ -232,11 +280,8 @@
     transition:all .25s ease;
   }
   .tab:hover{ color:var(--wine); border-color:var(--rose); }
-  .tab.active{
-    background:var(--wine); color:var(--paper);
-  }
+  .tab.active{ background:var(--wine); color:var(--paper); }
 
-  /* ============ POEM GRID ============ */
   .grid-section{ position:relative; z-index:2; padding:0 32px 100px; }
   .grid{
     max-width:var(--container); margin:0 auto;
@@ -256,11 +301,7 @@
     opacity:0; transform:translateY(24px);
   }
   .card.in-view{ opacity:1; transform:translateY(0); }
-  .card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 18px 32px rgba(91,64,72,.16);
-  }
-  /* page-curl corner */
+  .card:hover{ transform:translateY(-6px); box-shadow:0 18px 32px rgba(91,64,72,.16); }
   .card::after{
     content:"";
     position:absolute; right:0; bottom:0;
@@ -282,9 +323,7 @@
     padding:4px 12px; border-radius:999px;
     margin-bottom:16px;
   }
-  .card h3{
-    font-size:1.4rem; margin-bottom:12px; line-height:1.25;
-  }
+  .card h3{ font-size:1.4rem; margin-bottom:12px; line-height:1.25; }
   .card p.excerpt{
     font-style:italic; color:var(--ink-soft);
     font-size:1.02rem; line-height:1.7;
@@ -295,10 +334,23 @@
   .card .meta{
     display:flex; justify-content:space-between; align-items:center;
     font-family:var(--font-ui); font-size:.78rem; color:var(--rose);
-    font-weight:500;
+    font-weight:500; flex-wrap:wrap; gap:6px;
   }
+  .card-like-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-ui); font-size:.8rem; font-weight:600;
+    background:var(--paper-alt);
+    border:1px solid var(--blush);
+    color:var(--wine-deep);
+    padding:6px 12px; border-radius:999px;
+    cursor:pointer;
+    transition:transform .15s ease, background .25s ease, border-color .25s ease;
+  }
+  .card-like-btn:hover{ background:var(--blush); border-color:var(--rose); }
+  .card-like-btn:active{ transform:scale(.92); }
+  .card-like-btn .heart{ display:inline-block; transition:transform .25s ease; }
+  .card-like-btn.pulse .heart{ animation:heartPulse .4s ease; }
 
-  /* ============ DRAW A VERSE (signature interaction) ============ */
   .draw-overlay{
     position:fixed; inset:0; z-index:800;
     background:rgba(43,24,32,.55);
@@ -310,10 +362,7 @@
   }
   .draw-overlay.open{ opacity:1; pointer-events:auto; }
 
-  .draw-card{
-    perspective:1400px;
-    width:min(440px, 100%);
-  }
+  .draw-card{ perspective:1400px; width:min(440px, 100%); }
   .draw-card-inner{
     position:relative;
     width:100%; min-height:420px;
@@ -360,7 +409,6 @@
     cursor:pointer; font-size:1.1rem;
   }
 
-  /* ============ POEM MODAL ============ */
   .modal-overlay{
     position:fixed; inset:0; z-index:900;
     background:rgba(43,24,32,.5);
@@ -381,8 +429,14 @@
     box-shadow:0 30px 70px rgba(43,24,32,.35);
     transform:translateY(18px) scale(.98);
     transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    overflow:hidden;
   }
   .modal-overlay.open .modal{ transform:translateY(0) scale(1); }
+  .modal-progress{
+    position:absolute; top:0; left:0; height:3px; width:0%;
+    background:var(--gold); border-radius:0 3px 3px 0;
+    transition:width .1s linear;
+  }
   .modal-close{
     position:absolute; top:20px; right:24px;
     background:none; border:none; font-size:1.4rem;
@@ -395,10 +449,7 @@
     padding:4px 12px; border-radius:999px;
   }
   .modal h2{ font-size:2rem; margin:18px 0 6px; }
-  .modal .divider{
-    width:64px; height:2px; background:var(--gold);
-    margin:22px 0 26px; border:none;
-  }
+  .modal .divider{ width:64px; height:2px; background:var(--gold); margin:22px 0 26px; border:none; }
   .modal .body-text{
     font-family:var(--font-body); font-size:1.15rem; line-height:2;
     white-space:pre-line; color:var(--ink);
@@ -407,6 +458,18 @@
     margin-top:30px; font-family:var(--font-ui); font-size:.85rem;
     color:var(--rose); font-style:normal;
   }
+  .modal-nav{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:26px; padding-top:18px;
+    border-top:1px solid rgba(122,46,62,.1);
+  }
+  .modal-nav button{
+    font-family:var(--font-ui); font-size:.82rem; font-weight:600;
+    background:none; border:none; color:var(--wine);
+    cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  .modal-nav button:hover{ color:var(--wine-deep); }
+  .modal-nav button:disabled{ opacity:.35; cursor:default; }
 
   .explain-toggle{
     margin-top:34px;
@@ -428,9 +491,7 @@
     transition:max-height .4s ease, opacity .3s ease, margin-top .4s ease;
     opacity:0;
   }
-  .explain-box.open{
-    max-height:400px; opacity:1; margin-top:16px;
-  }
+  .explain-box.open{ max-height:400px; opacity:1; margin-top:16px; }
   .explain-box .inner{
     background:var(--paper-alt);
     border-left:3px solid var(--gold);
@@ -443,11 +504,87 @@
   }
   .explain-box .inner strong{ color:var(--wine-deep); }
 
-  /* ============ FOOTER ============ */
+  .engage{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+    margin-top:30px; padding-top:24px;
+    border-top:1px solid rgba(122,46,62,.12);
+  }
+  .like-btn, .share-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-ui); font-weight:600; font-size:.92rem;
+    background:var(--paper-alt);
+    border:1px solid var(--blush);
+    color:var(--wine-deep);
+    padding:10px 18px; border-radius:999px;
+    cursor:pointer;
+    transition:transform .15s ease, background .25s ease, border-color .25s ease;
+  }
+  .like-btn:hover, .share-btn:hover{ background:var(--blush); border-color:var(--rose); }
+  .like-btn:active, .share-btn:active{ transform:scale(.94); }
+  .like-btn .heart{ font-size:1.05rem; transition:transform .25s ease; }
+  .like-btn.pulse .heart{ animation:heartPulse .4s ease; }
+  @keyframes heartPulse{
+    0%{ transform:scale(1); }
+    40%{ transform:scale(1.4); }
+    100%{ transform:scale(1); }
+  }
+  .like-count{ color:var(--rose); }
+
+  .comments-section{ margin-top:30px; }
+  .comments-section h4{
+    font-family:var(--font-display); font-size:1.1rem;
+    color:var(--wine-deep); margin-bottom:16px;
+  }
+  #commentForm{ display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  #commentForm input, #commentForm textarea{
+    font-family:var(--font-ui); font-size:.92rem;
+    padding:11px 14px;
+    border:1px solid rgba(122,46,62,.2);
+    border-radius:8px;
+    background:var(--paper);
+    color:var(--ink);
+    resize:vertical;
+  }
+  #commentForm textarea{ min-height:70px; }
+  #commentForm input:focus, #commentForm textarea:focus{ outline:none; border-color:var(--rose); }
+  #commentForm .btn{ align-self:flex-end; padding:10px 24px; font-size:.85rem; }
+
+  .comments-list{ display:flex; flex-direction:column; gap:16px; }
+  .comment-item{ background:var(--paper-alt); border-radius:8px; padding:14px 18px; }
+  .comment-item .comment-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .comment-item .comment-name{ font-family:var(--font-ui); font-weight:600; font-size:.85rem; color:var(--wine-deep); }
+  .comment-item .comment-time{ font-family:var(--font-ui); font-size:.72rem; color:var(--rose); }
+  .comment-item .comment-text{ font-family:var(--font-body); font-size:.98rem; line-height:1.6; color:var(--ink-soft); white-space:pre-line; }
+  .comments-empty{ font-family:var(--font-ui); font-size:.88rem; color:var(--ink-soft); font-style:italic; }
+  .comment-status{ font-family:var(--font-ui); font-size:.8rem; color:var(--rose); margin-top:-2px; margin-bottom:10px; min-height:1em; }
+
+  .subscribe-box{ margin:0 0 30px; }
+  .subscribe-box p{ font-family:var(--font-ui); font-size:.85rem; color:rgba(233,211,180,.85); margin-bottom:12px; }
+  .subscribe-form{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .subscribe-form input{
+    font-family:var(--font-ui); font-size:.88rem;
+    padding:11px 16px; border-radius:999px; border:1px solid rgba(233,211,180,.35);
+    background:rgba(255,255,255,.06); color:#FBF3EF;
+    min-width:220px;
+  }
+  .subscribe-form input::placeholder{ color:rgba(233,211,180,.55); }
+  .subscribe-status{ font-family:var(--font-ui); font-size:.8rem; color:#E9D3B4; margin-top:10px; min-height:1.2em; }
+
+  .toast{
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--wine-deep); color:var(--paper);
+    font-family:var(--font-ui); font-size:.85rem; font-weight:600;
+    padding:12px 22px; border-radius:999px;
+    box-shadow:0 12px 26px rgba(43,24,32,.3);
+    z-index:1000; opacity:0; pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
   footer{
     position:relative; z-index:2;
-    background:var(--wine-deep);
-    color:var(--gold-soft);
+    background:#5C2130;
+    color:#E9D3B4;
     padding:70px 32px 40px;
     text-align:center;
   }
@@ -456,37 +593,21 @@
     font-style:italic;
     font-size:1.5rem;
     max-width:640px; margin:0 auto 28px;
-    color:var(--paper);
+    color:#FBF3EF;
     font-weight:500;
   }
-  footer .byline{
-    font-family:var(--font-ui); font-size:.88rem;
-    color:rgba(233,211,180,.85);
-    margin:0 0 22px;
-  }
-  footer .byline strong{
-    color:var(--paper); font-weight:600;
-  }
-  .socials{
-    display:flex; gap:14px; justify-content:center;
-    margin:0 0 30px;
-  }
+  footer .byline{ font-family:var(--font-ui); font-size:.88rem; color:rgba(233,211,180,.85); margin:0 0 22px; }
+  footer .byline strong{ color:#FBF3EF; font-weight:600; }
+  .socials{ display:flex; gap:14px; justify-content:center; margin:0 0 30px; }
   .socials a{
     width:40px; height:40px; border-radius:50%;
     border:1px solid rgba(233,211,180,.35);
     display:flex; align-items:center; justify-content:center;
-    color:var(--gold-soft);
+    color:#E9D3B4;
     transition:background .25s ease, color .25s ease, transform .25s ease, border-color .25s ease;
   }
-  .socials a:hover{
-    background:var(--gold-soft); color:var(--wine-deep);
-    border-color:var(--gold-soft);
-    transform:translateY(-3px);
-  }
-  footer .fine{
-    font-family:var(--font-ui); font-size:.82rem;
-    color:rgba(233,211,180,.7);
-  }
+  .socials a:hover{ background:#E9D3B4; color:#5C2130; border-color:#E9D3B4; transform:translateY(-3px); }
+  footer .fine{ font-family:var(--font-ui); font-size:.82rem; color:rgba(233,211,180,.7); }
 
   @media (max-width:900px){
     .wrap, .nav, .hero, .genre-nav, .grid-section{ padding-left:24px; padding-right:24px; }
@@ -507,10 +628,12 @@
     .nav-links a{ padding:13px 0; border-bottom:1px solid rgba(122,46,62,.08); }
     .nav-links a::after{ display:none; }
 
-    .hero{ padding:64px 20px 48px; }
+    .hero{ padding:64px 20px 40px; }
     .hero-actions{ flex-direction:column; align-items:stretch; }
     .hero-actions .btn{ text-align:center; }
 
+    .potd{ padding:26px 22px; }
+    .controls-row{ padding:0 20px 16px; }
     .genre-nav{ padding:0 20px 36px; justify-content:flex-start; overflow-x:auto; flex-wrap:nowrap; -webkit-overflow-scrolling:touch; }
     .tab{ flex:0 0 auto; }
 
@@ -535,7 +658,6 @@
     .logo{ font-size:1.15rem; }
   }
 
-  /* ============ CUSTOM CURSOR ============ */
   .cursor-dot, .cursor-ring{
     position:fixed; top:0; left:0;
     pointer-events:none; z-index:9999;
@@ -607,6 +729,9 @@
         <a href="#poems">Collection</a>
         <a href="#about">About</a>
       </nav>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+      </div>
     </div>
   </header>
 
@@ -619,6 +744,16 @@
       <a href="#poems" class="btn btn-ghost">Browse the Collection</a>
     </div>
   </section>
+
+  <div class="potd-wrap" id="potdWrap"></div>
+
+  <div class="controls-row">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search poems…">
+    <select class="sort-select" id="sortSelect">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+    </select>
+  </div>
 
   <nav class="genre-nav" id="genres">
     <button class="tab active" data-genre="all">All Poems</button>
@@ -637,14 +772,22 @@
     <p class="quote">"Every poem is a small mercy I give myself, then hand to you."</p>
     <p class="byline">Written by <strong>Deepa M</strong></p>
 
-    <!-- Replace the href values below with your real profile links -->
+    <div class="subscribe-box">
+      <p>Get notified when a new poem is published</p>
+      <form class="subscribe-form" id="subscribeForm">
+        <input type="email" id="subscribeEmail" placeholder="your@email.com" required>
+        <button type="submit" class="btn btn-primary btn-sm">Subscribe</button>
+      </form>
+      <p class="subscribe-status" id="subscribeStatus"></p>
+    </div>
+
     <div class="socials">
       <a href="https://instagram.com/deartbuff" target="_blank" rel="noopener" aria-label="Instagram">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 0 1 1.77 1.15 4.9 4.9 0 0 1 1.15 1.77c.16.46.35 1.26.4 2.43.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.46.16-1.26.35-2.43.4-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.24-1.97.4-2.43a4.9 4.9 0 0 1 1.15-1.77A4.9 4.9 0 0 1 5.59 1.8c.46-.16 1.26-.35 2.43-.4C9.29 1.34 9.67 1.33 12.87 1.33M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.41-10.4a1.44 1.44 0 1 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg>
       </a>
       <a href="https://www.linkedin.com/in/deepa-mofficial" target="_blank" rel="noopener" aria-label="LinkedIn">
         <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor">
-                    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm8 0h4.8v2.2h.1c.7-1.3 2.3-2.7 4.8-2.7 5.1 0 6 3.3 6 7.6V24h-5v-7.7c0-1.8 0-4.2-2.6-4.2s-3 2-3 4.1V24H8V8z"/>
+          <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm8 0h4.8v2.2h.1c.7-1.3 2.3-2.7 4.8-2.7 5.1 0 6 3.3 6 7.6V24h-5v-7.7c0-1.8 0-4.2-2.6-4.2s-3 2-3 4.1V24H8V8z"/>
         </svg>
       </a>
       <a href="mailto:deepamurugan2112@gmail.com" aria-label="Email">
@@ -655,7 +798,6 @@
     <p class="fine">Soul's Whisper — poems written when a feeling got too big to keep quiet </p>
   </footer>
 
-  <!-- Draw a Verse overlay -->
   <div class="draw-overlay" id="drawOverlay">
     <div class="draw-card">
       <button class="draw-close" id="drawClose" aria-label="Close">✕</button>
@@ -664,163 +806,241 @@
           <div class="flourish">✦</div>
           <div class="hint">drawing your verse…</div>
         </div>
-        <div class="draw-face draw-back" id="drawBack">
-          <!-- filled by JS -->
-        </div>
+        <div class="draw-face draw-back" id="drawBack"></div>
       </div>
     </div>
   </div>
 
-  <!-- Full poem modal -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modalContent">
+      <div class="modal-progress" id="modalProgress"></div>
       <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
     </div>
   </div>
 
-<script>
+  <div class="toast" id="toast"></div>
+
+<script type="module">
 /* ======================================================================
-   POEMS — replace the text below with your own. Keep the same structure:
-   id, genre (love | sad | faith | nature | hope), title, excerpt, body.
+   FIREBASE SETUP
+   ====================================================================== */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, increment,
+  collection, addDoc, query, where, onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOEzCQvon14TvXcIlvJ3RhDG7Nwo8d4lw",
+  authDomain: "souls-whisper.firebaseapp.com",
+  projectId: "souls-whisper",
+  storageBucket: "souls-whisper.firebasestorage.app",
+  messagingSenderId: "486312750293",
+  appId: "1:486312750293:web:df57ee57bd55272f65865c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ======================================================================
+   POEMS — edit this array directly to add, change, or remove poems.
+   Keep each "id" unique. genre must be one of:
+   love | melancholy | faith | nature | hope
    ====================================================================== */
 const poems = [
   {
-  id: 1,
-  genre: "melancholy",
-  title: "Debris of My Soul",
-  excerpt: "You might've seen my smile,\nBut it's merely a facade for a while.\nLeft with just the debris of my soul.",
-  body: `I'm lost in despair,
-I always scream and flare.
-The voices in my head
-Won't leave me until I'm dead.
-
-You might've seen my smile,
-But it's merely a facade for a while.
-I really wanna be happy,
-But the world is so trappy.
-
-Oh, little did I know
-That myself is my foe.
-My wicked mind is a hell
-Where demons and monsters dwell.
-
-I'm trying to escape,
-But they've stuck me with a tape.
-Now I know I've got nowhere,
-And I realized I should've been aware.
-
-It ain't under my control,
-And it begins to take its toll.
-I'm just trapped in a black hole,
-Left with just the debris of my soul.`,
-  note: "This poem explores the hidden weight of emotional suffering behind a convincing smile. The speaker's greatest battle isn't with the outside world but with their own mind, portrayed as a prison filled with demons and monsters. The closing image—'the debris of my soul'—captures the feeling of being reduced to scattered fragments after a long struggle with despair."
-},
+    id: 1, genre: "melancholy", title: "Debris of My Soul",
+    excerpt: "You might've seen my smile,\nBut it's merely a facade for a while.\nLeft with just the debris of my soul.",
+    body: "I'm lost in despair,\nI always scream and flare.\nThe voices in my head\nWon't leave me until I'm dead.\n\nYou might've seen my smile,\nBut it's merely a facade for a while.\nI really wanna be happy,\nBut the world is so trappy.\n\nOh, little did I know\nThat myself is my foe.\nMy wicked mind is a hell\nWhere demons and monsters dwell.\n\nI'm trying to escape,\nBut they've stuck me with a tape.\nNow I know I've got nowhere,\nAnd I realized I should've been aware.\n\nIt ain't under my control,\nAnd it begins to take its toll.\nI'm just trapped in a black hole,\nLeft with just the debris of my soul.",
+    note: "This poem explores the hidden weight of emotional suffering behind a convincing smile. The speaker's greatest battle isn't with the outside world but with their own mind, portrayed as a prison filled with demons and monsters. The closing image—'the debris of my soul'—captures the feeling of being reduced to scattered fragments after a long struggle with despair."
+  },
   {
-  id: 2,
-  genre: "melancholy",
-  title: "Duality",
-  excerpt: "I'm neither an angel nor a monstrum.\nI'm both the offender and the victim.",
-  body: `I'm neither an angel nor a monstrum.
-I'm both the offender and the victim.`,
-  note: "This brief poem explores the contradictions that exist within a person. By rejecting the extremes of pure innocence and pure evil, it acknowledges that people can carry both guilt and suffering at once. The use of 'monstrum' lends the poem a timeless, almost mythic quality, emphasizing the speaker's struggle with identity rather than morality."
-},
-{
-  id: 3,
-  genre: "melancholy",
-  title: "Echoes of Lost Friendship",
-  excerpt: "You got new friends and I'm happy for that.\nBut teach me one thing, how could you do that?\nI miss our memories, the old feel I used to get.",
-  body: `Long, long ago, we were happy together,
-And you promised me that you'd stay forever.
-I thought we were best friends, dear,
-Until you shattered and left me in tears.
-
-The world became so lonely the minute you left,
-Like the earth lost its moon, and all the planets were theft.
-I was tryna find a mate who would be loyal and true,
-But I failed to feel the old vibe because they were not you.
-
-No matter what the reason it could be,
-You shouldn't have slipped away from me.
-A true friend would never leave, hun.
-Maybe I was not your ally, so you'd run.
-
-Maybe it was easy as you were the one
-Who had forgotten all the memories and fun.
-But I was drowning and left out with none,
-Since this lonely earth had no one except the sun.
-
-You got new friends and I'm happy for that,
-But teach me one thing, how could you do that?
-I'm trying and trying, tryna befriend,
-But I'm failing and failing as I couldn't even pretend.
-
-I still remember those last words you said.
-You never wanted to see me again, so I hid.
-You never wanted to talk again, so you fled.
-You'd warned me to never come back, so I did.
-
-If that would make you happy, what else would I do?
-Now I yearn for those old vibes, but I ain't miss you.
-I miss our memories, the old feel I used to get,
-But the wound in my cracked heart hasn't healed yet.
-
-Don't worry, miss, I've finally learnt to survive this.
-To be a lone wolf is the only thing that's a pure bliss.
-So, I've become cold and shuttered all the doors,
-So that I'd feel nothing, I wouldn't give a damn anymore.`,
-  note: "This poem captures the quiet devastation of losing someone once considered irreplaceable. It mourns not only the absence of a friend but also the version of the speaker that existed within that friendship. Moving through grief, longing, and acceptance, it ends with emotional detachment—not as victory, but as a shield forged from heartbreak."
-},
-   {
-  id: 4,
-  genre: "melancholy",
-  title: "The Empty Space",
-  excerpt: "I was looking high and low\nTo fill the gap, but I didn't know\nThat whoever they are,\nThey can't be you.",
-  body: `I was looking high and low
-To fill the gap, but I didn't know
-That I can't socialize with somebody new
-Because whoever they are, they can't be you.`,
-  note: "This poem reflects the quiet realization that some absences cannot be replaced. It isn't about refusing new connections, but about understanding that certain people leave a space no one else can occupy. The simplicity of the ending makes the grief feel intimate and deeply personal."
-},
-
-
-
-
-
-
-
-
-  
-  
-    
-  
+    id: 2, genre: "melancholy", title: "Duality",
+    excerpt: "I'm neither an angel nor a monstrum.\nI'm both the offender and the victim.",
+    body: "I'm neither an angel nor a monstrum.\nI'm both the offender and the victim.",
+    note: "This brief poem explores the contradictions that exist within a person. By rejecting the extremes of pure innocence and pure evil, it acknowledges that people can carry both guilt and suffering at once. The use of 'monstrum' lends the poem a timeless, almost mythic quality, emphasizing the speaker's struggle with identity rather than morality."
+  },
+  {
+    id: 3, genre: "melancholy", title: "Echoes of Lost Friendship",
+    excerpt: "You got new friends and I'm happy for that.\nBut teach me one thing, how could you do that?\nI miss our memories, the old feel I used to get.",
+    body: "Long, long ago, we were happy together,\nAnd you promised me that you'd stay forever.\nI thought we were best friends, dear,\nUntil you shattered and left me in tears.\n\nThe world became so lonely the minute you left,\nLike the earth lost its moon, and all the planets were theft.\nI was tryna find a mate who would be loyal and true,\nBut I failed to feel the old vibe because they were not you.\n\nNo matter what the reason it could be,\nYou shouldn't have slipped away from me.\nA true friend would never leave, hun.\nMaybe I was not your ally, so you'd run.\n\nMaybe it was easy as you were the one\nWho had forgotten all the memories and fun.\nBut I was drowning and left out with none,\nSince this lonely earth had no one except the sun.\n\nYou got new friends and I'm happy for that,\nBut teach me one thing, how could you do that?\nI'm trying and trying, tryna befriend,\nBut I'm failing and failing as I couldn't even pretend.\n\nI still remember those last words you said.\nYou never wanted to see me again, so I hid.\nYou never wanted to talk again, so you fled.\nYou'd warned me to never come back, so I did.\n\nIf that would make you happy, what else would I do?\nNow I yearn for those old vibes, but I ain't miss you.\nI miss our memories, the old feel I used to get,\nBut the wound in my cracked heart hasn't healed yet.\n\nDon't worry, miss, I've finally learnt to survive this.\nTo be a lone wolf is the only thing that's a pure bliss.\nSo, I've become cold and shuttered all the doors,\nSo that I'd feel nothing, I wouldn't give a damn anymore.",
+    note: "This poem captures the quiet devastation of losing someone once considered irreplaceable. It mourns not only the absence of a friend but also the version of the speaker that existed within that friendship. Moving through grief, longing, and acceptance, it ends with emotional detachment—not as victory, but as a shield forged from heartbreak."
+  },
+  {
+    id: 4, genre: "melancholy", title: "The Empty Space",
+    excerpt: "I was looking high and low\nTo fill the gap, but I didn't know\nThat whoever they are,\nThey can't be you.",
+    body: "I was looking high and low\nTo fill the gap, but I didn't know\nThat I can't socialize with somebody new\nBecause whoever they are, they can't be you.",
+    note: "This poem reflects the quiet realization that some absences cannot be replaced. It isn't about refusing new connections, but about understanding that certain people leave a space no one else can occupy. The simplicity of the ending makes the grief feel intimate and deeply personal."
+  }
+  /* Add a new poem by copying the block above and pasting it here, just before
+     this closing bracket. Give it the next id number (5, 6, 7...) and remember
+     the comma after the previous poem's closing brace. */
 ];
+
+/* ---- likes ---- */
+async function getLikeCount(poemId){
+  try{
+    const snap = await getDoc(doc(db, "likes", String(poemId)));
+    return snap.exists() ? (snap.data().count || 0) : 0;
+  }catch(err){ console.error(err); return 0; }
+}
+async function likePoem(poemId){
+  const ref = doc(db, "likes", String(poemId));
+  const snap = await getDoc(ref);
+  if(snap.exists()) await updateDoc(ref, { count: increment(1) });
+  else await setDoc(ref, { count: 1 });
+}
+
+/* ---- comments ----
+   NOTE: this query filters by poemId only (no orderBy in the query itself).
+   Firestore requires a composite index for where()+orderBy() on different
+   fields, and without that index the query silently fails — which is why
+   comments weren't appearing before. Sorting now happens in JS instead. */
+function listenComments(poemId, onChange){
+  const q = query(
+    collection(db, "comments"),
+    where("poemId", "==", String(poemId))
+  );
+  return onSnapshot(q, snap => {
+    const items = [];
+    snap.forEach(d => items.push(d.data()));
+    items.sort((a, b) => {
+      const ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : Infinity;
+      const tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : Infinity;
+      return tb - ta;
+    });
+    onChange(items);
+  }, err => { console.error(err); onChange(null); });
+}
+async function postComment(poemId, name, text){
+  await addDoc(collection(db, "comments"), {
+    poemId: String(poemId),
+    name: (name && name.trim()) ? name.trim().slice(0, 60) : "Anonymous",
+    text: text.trim().slice(0, 1000),
+    createdAt: serverTimestamp()
+  });
+}
+function formatTime(ts){
+  if(!ts || !ts.toDate) return "just now";
+  const d = ts.toDate();
+  return d.toLocaleDateString(undefined, { month:"short", day:"numeric" }) + " · " +
+         d.toLocaleTimeString(undefined, { hour:"2-digit", minute:"2-digit" });
+}
+
+/* ---- subscribers ---- */
+async function subscribeEmail(email){
+  await addDoc(collection(db, "subscribers"), { email: email.trim(), createdAt: serverTimestamp() });
+}
+
+/* ======================================================================
+   STATE
+   ====================================================================== */
+let currentGenre = "all";
+let currentSort = "newest";
+let searchTerm = "";
+let unsubscribeComments = null;
+let currentModalList = [];
+let currentModalIndex = -1;
 
 const genreLabels = { love:"Love", melancholy:"Melancholy", faith:"Faith", nature:"Nature", hope:"Hope" };
 const readTime = words => Math.max(1, Math.round(words / 40)) + " min read";
 
-/* ---------- render poem cards ---------- */
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+function showToast(msg){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function boot(){
+  renderPotd();
+  renderCards();
+  maybeOpenFromHash();
+}
+
+function getFilteredSortedPoems(){
+  let list = poems.slice();
+  if(currentGenre !== "all") list = list.filter(p => p.genre === currentGenre);
+  if(searchTerm){
+    const t = searchTerm.toLowerCase();
+    list = list.filter(p =>
+      (p.title || "").toLowerCase().includes(t) ||
+      (p.excerpt || "").toLowerCase().includes(t) ||
+      (p.body || "").toLowerCase().includes(t)
+    );
+  }
+  if(currentSort === "newest") list.reverse();
+  return list;
+}
+
+function renderPotd(){
+  const wrap = document.getElementById("potdWrap");
+  if(poems.length === 0){ wrap.innerHTML = ""; return; }
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  const p = poems[dayOfYear % poems.length];
+  wrap.innerHTML = `
+    <div class="potd">
+      <span class="eyebrow">Today's whisper</span>
+      <h3>${escapeHtml(p.title)}</h3>
+      <p>${escapeHtml(p.excerpt)}</p>
+      <button class="btn btn-primary btn-sm" id="potdReadBtn">Read the full poem</button>
+    </div>
+  `;
+  document.getElementById("potdReadBtn").addEventListener("click", () => openModal(p));
+}
+
 const grid = document.getElementById("poemGrid");
 
-function renderCards(){
+async function renderCards(){
+  const list = getFilteredSortedPoems();
   grid.innerHTML = "";
-  poems.forEach(p => {
+  if(list.length === 0){
+    grid.innerHTML = `<p class="comments-empty">No poems match your search yet.</p>`;
+    return;
+  }
+  for(const p of list){
     const card = document.createElement("article");
     card.className = "card";
     card.dataset.genre = p.genre;
+
+    const likeCount = await getLikeCount(p.id);
+
     card.innerHTML = `
-      <span class="tag">${genreLabels[p.genre]}</span>
-      <h3>${p.title}</h3>
-      <p class="excerpt">${p.excerpt}</p>
-      <div class="meta"><span>${readTime(p.body.split(/\s+/).length)}</span><span>Read poem →</span></div>
+      <span class="tag">${genreLabels[p.genre] || p.genre}</span>
+      <h3>${escapeHtml(p.title)}</h3>
+      <p class="excerpt">${escapeHtml(p.excerpt)}</p>
+      <div class="meta">
+        <span>${readTime((p.body || "").split(/\s+/).length)}</span>
+        <button class="card-like-btn" data-poem-id="${p.id}">
+          <span class="heart">🤍</span><span class="card-like-count">${likeCount}</span>
+        </button>
+      </div>
     `;
+
     card.addEventListener("click", () => openModal(p));
+
+    const likeBtn = card.querySelector(".card-like-btn");
+    likeBtn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const countEl = likeBtn.querySelector(".card-like-count");
+      const current = parseInt(countEl.textContent, 10) || 0;
+      countEl.textContent = current + 1;
+      likeBtn.classList.remove("pulse"); void likeBtn.offsetWidth; likeBtn.classList.add("pulse");
+      try{ await likePoem(p.id); }
+      catch(err){ countEl.textContent = current; showToast("Couldn't save your like — try again"); }
+    });
+
     grid.appendChild(card);
-  });
+  }
   observeCards();
 }
-renderCards();
 
-/* ---------- scroll reveal ---------- */
 function observeCards(){
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add("in-view"); io.unobserve(e.target); } });
@@ -828,41 +1048,84 @@ function observeCards(){
   document.querySelectorAll(".card").forEach(c => io.observe(c));
 }
 
-/* ---------- genre filter ---------- */
 const tabs = document.querySelectorAll(".tab");
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
     tabs.forEach(t => t.classList.remove("active"));
     tab.classList.add("active");
-    const genre = tab.dataset.genre;
-    document.querySelectorAll(".card").forEach(card => {
-      const show = genre === "all" || card.dataset.genre === genre;
-      card.style.display = show ? "" : "none";
-    });
+    currentGenre = tab.dataset.genre;
+    renderCards();
   });
 });
 
-/* ---------- poem modal ---------- */
+const searchInput = document.getElementById("searchInput");
+let searchDebounce = null;
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchTerm = searchInput.value.trim();
+    renderCards();
+  }, 200);
+});
+document.getElementById("sortSelect").addEventListener("change", (e) => {
+  currentSort = e.target.value;
+  renderCards();
+});
+
 const modalOverlay = document.getElementById("modalOverlay");
 const modalContent = document.getElementById("modalContent");
 
 function openModal(p){
+  if(unsubscribeComments){ unsubscribeComments(); unsubscribeComments = null; }
+
+  currentModalList = getFilteredSortedPoems();
+  currentModalIndex = currentModalList.findIndex(x => x.id === p.id);
+  if(currentModalIndex === -1){ currentModalList = poems; currentModalIndex = poems.findIndex(x => x.id === p.id); }
+
+  history.replaceState(null, "", `#poem-${p.id}`);
+
   modalContent.innerHTML = `
+    <div class="modal-progress" id="modalProgress"></div>
     <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
-    <span class="tag">${genreLabels[p.genre]}</span>
-    <h2>${p.title}</h2>
+    <span class="tag">${genreLabels[p.genre] || p.genre}</span>
+    <h2>${escapeHtml(p.title)}</h2>
     <hr class="divider">
-    <p class="body-text">${p.body}</p>
+    <p class="body-text">${escapeHtml(p.body)}</p>
     <p class="signoff"> — Deepa M </p>
     ${p.note ? `
     <button class="explain-toggle" id="explainToggle">
       <span class="chevron">▾</span> Stuck? See what this poem means
     </button>
     <div class="explain-box" id="explainBox">
-      <div class="inner"><strong>A quick read:</strong> ${p.note}</div>
+      <div class="inner"><strong>A quick read:</strong> ${escapeHtml(p.note)}</div>
     </div>` : ``}
+
+    <div class="engage">
+      <button class="like-btn" id="likeBtn">
+        <span class="heart">🤍</span><span>Like</span><span class="like-count" id="likeCount">–</span>
+      </button>
+      <button class="share-btn" id="shareBtn">🔗 Share</button>
+    </div>
+
+    <div class="comments-section">
+      <h4>Comments</h4>
+      <form id="commentForm">
+        <input type="text" id="commentName" placeholder="Name (optional)" maxlength="60">
+        <textarea id="commentText" placeholder="Share your thoughts..." maxlength="1000" required></textarea>
+        <button type="submit" class="btn btn-primary">Post comment</button>
+      </form>
+      <div class="comment-status" id="commentStatus"></div>
+      <div class="comments-list" id="commentsList"><p class="comments-empty">Loading comments…</p></div>
+    </div>
+
+    <div class="modal-nav">
+      <button id="prevPoemBtn">← Previous</button>
+      <button id="nextPoemBtn">Next →</button>
+    </div>
   `;
+
   document.getElementById("modalClose").addEventListener("click", closeModal);
+
   const explainToggle = document.getElementById("explainToggle");
   if(explainToggle){
     explainToggle.addEventListener("click", () => {
@@ -870,16 +1133,114 @@ function openModal(p){
       document.getElementById("explainBox").classList.toggle("open");
     });
   }
+
+  const likeBtn = document.getElementById("likeBtn");
+  const likeCountEl = document.getElementById("likeCount");
+  getLikeCount(p.id).then(count => { likeCountEl.textContent = count; });
+  likeBtn.addEventListener("click", async () => {
+    const current = parseInt(likeCountEl.textContent, 10) || 0;
+    likeCountEl.textContent = current + 1;
+    likeBtn.classList.remove("pulse"); void likeBtn.offsetWidth; likeBtn.classList.add("pulse");
+    try{ await likePoem(p.id); }
+    catch(err){ likeCountEl.textContent = current; showToast("Couldn't save your like — try again"); }
+  });
+
+  document.getElementById("shareBtn").addEventListener("click", async () => {
+    const url = `${location.origin}${location.pathname}#poem-${p.id}`;
+    if(navigator.share){
+      try{ await navigator.share({ title: p.title, text: p.excerpt, url }); }
+      catch(err){}
+    }else{
+      try{ await navigator.clipboard.writeText(url); showToast("Link copied to clipboard"); }
+      catch(err){ showToast(url); }
+    }
+  });
+
+  const commentsList = document.getElementById("commentsList");
+  const commentForm = document.getElementById("commentForm");
+  const commentStatus = document.getElementById("commentStatus");
+
+  unsubscribeComments = listenComments(p.id, comments => {
+    if(comments === null){
+      commentsList.innerHTML = `<p class="comments-empty">Comments couldn't be loaded right now.</p>`;
+      return;
+    }
+    if(comments.length === 0){
+      commentsList.innerHTML = `<p class="comments-empty">No comments yet — be the first to share your thoughts.</p>`;
+      return;
+    }
+    commentsList.innerHTML = comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-head">
+          <span class="comment-name">${escapeHtml(c.name)}</span>
+          <span class="comment-time">${formatTime(c.createdAt)}</span>
+        </div>
+        <div class="comment-text">${escapeHtml(c.text)}</div>
+      </div>
+    `).join("");
+  });
+
+  commentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nameEl = document.getElementById("commentName");
+    const textEl = document.getElementById("commentText");
+    const text = textEl.value.trim();
+    if(!text) return;
+    const submitBtn = commentForm.querySelector("button[type=submit]");
+    submitBtn.disabled = true;
+    commentStatus.textContent = "Posting…";
+    try{
+      await postComment(p.id, nameEl.value, text);
+      nameEl.value = ""; textEl.value = ""; commentStatus.textContent = "";
+    }catch(err){
+      commentStatus.textContent = "Couldn't post your comment. Please try again.";
+      console.error(err);
+    }finally{ submitBtn.disabled = false; }
+  });
+
+  const prevBtn = document.getElementById("prevPoemBtn");
+  const nextBtn = document.getElementById("nextPoemBtn");
+  prevBtn.disabled = currentModalList.length < 2;
+  nextBtn.disabled = currentModalList.length < 2;
+  prevBtn.addEventListener("click", () => {
+    if(currentModalList.length < 2) return;
+    currentModalIndex = (currentModalIndex - 1 + currentModalList.length) % currentModalList.length;
+    openModal(currentModalList[currentModalIndex]);
+  });
+  nextBtn.addEventListener("click", () => {
+    if(currentModalList.length < 2) return;
+    currentModalIndex = (currentModalIndex + 1) % currentModalList.length;
+    openModal(currentModalList[currentModalIndex]);
+  });
+
+  const progressBar = document.getElementById("modalProgress");
+  function updateProgress(){
+    const scrollable = modalOverlay.scrollHeight - modalOverlay.clientHeight;
+    const pct = scrollable > 0 ? (modalOverlay.scrollTop / scrollable) * 100 : 0;
+    progressBar.style.width = Math.min(100, Math.max(0, pct)) + "%";
+  }
+  modalOverlay.addEventListener("scroll", updateProgress);
+  updateProgress();
+
   modalOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
 }
+
 function closeModal(){
   modalOverlay.classList.remove("open");
   document.body.style.overflow = "";
+  if(unsubscribeComments){ unsubscribeComments(); unsubscribeComments = null; }
+  history.replaceState(null, "", location.pathname + location.search);
 }
 modalOverlay.addEventListener("click", e => { if(e.target === modalOverlay) closeModal(); });
 
-/* ---------- mobile menu ---------- */
+function maybeOpenFromHash(){
+  const m = location.hash.match(/^#poem-(.+)$/);
+  if(!m) return;
+  const p = poems.find(x => String(x.id) === m[1]);
+  if(p) openModal(p);
+}
+
 const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.getElementById("navLinks");
 menuToggle.addEventListener("click", () => {
@@ -895,7 +1256,6 @@ navLinks.querySelectorAll("a").forEach(a => {
   });
 });
 
-/* ---------- draw a verse ---------- */
 const drawOverlay = document.getElementById("drawOverlay");
 const drawInner = document.getElementById("drawInner");
 const drawBack = document.getElementById("drawBack");
@@ -903,28 +1263,24 @@ const drawBtn = document.getElementById("drawBtn");
 const drawClose = document.getElementById("drawClose");
 
 drawBtn.addEventListener("click", () => {
+  if(poems.length === 0) return;
   const p = poems[Math.floor(Math.random() * poems.length)];
   drawBack.innerHTML = `
-    <span class="tag">${genreLabels[p.genre]}</span>
-    <h3>${p.title}</h3>
-    <p>${p.excerpt}</p>
+    <span class="tag">${genreLabels[p.genre] || p.genre}</span>
+    <h3>${escapeHtml(p.title)}</h3>
+    <p>${escapeHtml(p.excerpt)}</p>
     <button class="btn btn-primary" id="drawReadFull">Read the full poem</button>
   `;
   drawInner.classList.remove("flipped");
   drawOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
   requestAnimationFrame(() => setTimeout(() => drawInner.classList.add("flipped"), 250));
-
   setTimeout(() => {
     const readBtn = document.getElementById("drawReadFull");
     if(readBtn) readBtn.addEventListener("click", () => { closeDraw(); openModal(p); });
   }, 300);
 });
-
-function closeDraw(){
-  drawOverlay.classList.remove("open");
-  document.body.style.overflow = "";
-}
+function closeDraw(){ drawOverlay.classList.remove("open"); document.body.style.overflow = ""; }
 drawClose.addEventListener("click", closeDraw);
 drawOverlay.addEventListener("click", e => { if(e.target === drawOverlay) closeDraw(); });
 
@@ -932,11 +1288,43 @@ document.addEventListener("keydown", e => {
   if(e.key === "Escape"){ closeModal(); closeDraw(); }
 });
 
-/* ---------- custom cursor (mouse devices only, respects reduced motion) ---------- */
+const themeToggle = document.getElementById("themeToggle");
+function applyTheme(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+  try{ localStorage.setItem("sw-theme", theme); }catch(e){}
+}
+(function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem("sw-theme"); }catch(e){}
+  if(!saved){ saved = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+  applyTheme(saved);
+})();
+themeToggle.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  applyTheme(current === "dark" ? "light" : "dark");
+});
+
+document.getElementById("subscribeForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = document.getElementById("subscribeEmail");
+  const status = document.getElementById("subscribeStatus");
+  const email = input.value.trim();
+  if(!email) return;
+  status.textContent = "Saving…";
+  try{
+    await subscribeEmail(email);
+    input.value = "";
+    status.textContent = "You're on the list — thank you.";
+  }catch(err){
+    status.textContent = "Couldn't save that right now. Please try again.";
+    console.error(err);
+  }
+});
+
 (function initCursor(){
-  const canHover = window.matchMedia("(pointer: fine) and (hover: hover)").matches;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if(!canHover || reduceMotion) return;
+  if(reduceMotion) return;
 
   document.body.classList.add("has-custom-cursor");
 
@@ -945,52 +1333,85 @@ document.addEventListener("keydown", e => {
   document.body.appendChild(dot);
   document.body.appendChild(ring);
 
-  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-  let ringX = mouseX, ringY = mouseY;
+  let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
+  let dotX = targetX, dotY = targetY;
+  let ringX = targetX, ringY = targetY;
   let started = false;
   let lastPetal = 0;
+  let hideTimer = null;
 
-  window.addEventListener("mousemove", e => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%,-50%)`;
-    if(!started){ ringX = mouseX; ringY = mouseY; started = true; }
+  function showCursor(){ clearTimeout(hideTimer); dot.style.opacity = ""; ring.style.opacity = ""; }
+  function scheduleHide(delay){ clearTimeout(hideTimer); hideTimer = setTimeout(() => { dot.style.opacity = 0; ring.style.opacity = 0; }, delay); }
 
+  function dropPetal(x, y){
     const now = performance.now();
-    if(now - lastPetal > 90){
-      lastPetal = now;
-      const petal = document.createElement("span");
-      petal.className = "cursor-petal";
-      petal.style.left = mouseX + "px";
-      petal.style.top = mouseY + "px";
-      petal.style.setProperty("--drift", (Math.random() * 26 - 13).toFixed(1) + "px");
-      document.body.appendChild(petal);
-      setTimeout(() => petal.remove(), 900);
+    if(now - lastPetal < 90) return;
+    lastPetal = now;
+    const petal = document.createElement("span");
+    petal.className = "cursor-petal";
+    petal.style.left = x + "px"; petal.style.top = y + "px";
+    petal.style.setProperty("--drift", (Math.random() * 26 - 13).toFixed(1) + "px");
+    document.body.appendChild(petal);
+    setTimeout(() => petal.remove(), 900);
+  }
+  function setTarget(x, y, snap){
+    targetX = x; targetY = y;
+    if(!started || snap){ dotX = x; dotY = y; ringX = x; ringY = y; started = true; }
+    dropPetal(x, y);
+  }
+  function setHoverState(el){
+    const isInteractive = el && el.closest && el.closest("a, button, .card, .tab");
+    ring.classList.toggle("hover", !!isInteractive);
+    dot.classList.toggle("hover", !!isInteractive);
+  }
+
+  window.addEventListener("mousemove", e => { showCursor(); setTarget(e.clientX, e.clientY, false); });
+  document.addEventListener("mouseover", e => setHoverState(e.target));
+  document.addEventListener("mouseout", e => {
+    if(e.target.closest && e.target.closest("a, button, .card, .tab")){
+      ring.classList.remove("hover"); dot.classList.remove("hover");
     }
   });
+  document.addEventListener("mouseleave", () => scheduleHide(0));
+  document.addEventListener("mouseenter", () => showCursor());
 
-  /* smooth trailing ring: ease toward the cursor every frame, independent of mousemove firing rate */
-  function tick(){
-    ringX += (mouseX - ringX) * 0.16;
-    ringY += (mouseY - ringY) * 0.16;
+  window.addEventListener("touchstart", e => {
+    const t = e.touches[0]; if(!t) return;
+    showCursor(); setTarget(t.clientX, t.clientY, true);
+    setHoverState(document.elementFromPoint(t.clientX, t.clientY));
+  }, { passive:true });
+  window.addEventListener("touchmove", e => {
+    const t = e.touches[0]; if(!t) return;
+    showCursor(); setTarget(t.clientX, t.clientY, false);
+    setHoverState(document.elementFromPoint(t.clientX, t.clientY));
+  }, { passive:true });
+  window.addEventListener("touchend", () => {
+    ring.classList.remove("hover"); dot.classList.remove("hover");
+    scheduleHide(500);
+  }, { passive:true });
+
+  let lastTime = null;
+  function tick(now){
+    if(lastTime === null) lastTime = now;
+    const dt = Math.min(48, now - lastTime) / 16.6667;
+    lastTime = now;
+
+    const dotEase = 1 - Math.pow(1 - 0.30, dt);
+    const ringEase = 1 - Math.pow(1 - 0.13, dt);
+
+    dotX += (targetX - dotX) * dotEase;
+    dotY += (targetY - dotY) * dotEase;
+    ringX += (targetX - ringX) * ringEase;
+    ringY += (targetY - ringY) * ringEase;
+
+    dot.style.transform = `translate(${dotX}px, ${dotY}px) translate(-50%,-50%)`;
     ring.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%,-50%)`;
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
-
-  document.addEventListener("mouseover", e => {
-    if(e.target.closest("a, button, .card, .tab")){
-      ring.classList.add("hover"); dot.classList.add("hover");
-    }
-  });
-  document.addEventListener("mouseout", e => {
-    if(e.target.closest("a, button, .card, .tab")){
-      ring.classList.remove("hover"); dot.classList.remove("hover");
-    }
-  });
-
-  document.addEventListener("mouseleave", () => { dot.style.opacity = 0; ring.style.opacity = 0; });
-  document.addEventListener("mouseenter", () => { dot.style.opacity = ""; ring.style.opacity = ""; });
 })();
+
+boot();
 </script>
 </body>
 </html>
