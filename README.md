@@ -1,56 +1,117 @@
-# Soul's Whisper
+# Soul's Whisper — A Collection of Poems
 
-A personal collection of poems, written whenever a feeling got too big to keep quiet — sad, happy, or somewhere in between.
+A personal poetry site with likes, comments, and a mailing-list signup — built as a single `index.html` file with no build tools, backed by Firebase (Firestore) for free.
 
-**[View the live site →](https://deepa-m-dev.github.io/souls-whisper/)** 
+## Features
 
-## About
+- **Poem collection** with genre tabs, search, and sort (newest/oldest)
+- **Poem of the Day** — a featured poem on the homepage, rotates daily
+- **Likes** — from the card or inside a poem, no login required, unlimited likes per person
+- **Comments** — name (optional) + message, shown live under each poem
+- **Share** — native share sheet on mobile, or copies a direct link to that poem
+- **Next / Previous** navigation inside the poem view
+- **Dark mode** toggle (saved across visits)
+- **Draw a Verse** — a random poem, flip-card style
+- **Subscribe** — collects emails in Firestore for manual mailing later
+- **Custom cursor** with a petal trail (mouse + touch, respects reduced-motion settings)
 
-Soul's Whisper is a single-page poetry showcase with:
+## Tech stack
 
-- **Genre filtering** — browse by Love, Sad, Faith, Nature, or Hope
-- **Draw a Verse** — a shuffled, tarot-card-style reveal of a random poem
-- **"Stuck? See what this poem means"** — an optional, collapsible explanation for readers who want a plain-English read on a poem's meaning
-- Soft ambient motion (falling petals, ink-typewriter hero text), fully respecting `prefers-reduced-motion`
+- Plain HTML/CSS/JavaScript — no framework, no bundler, no npm
+- [Firebase Firestore](https://firebase.google.com/docs/firestore) for likes, comments, and subscriber emails (free Spark plan is plenty for a personal site)
+- Loaded entirely via CDN `<script type="module">` imports — nothing to install
 
-## Editing the poems
+## Project structure
 
-All poem content lives in one place — no need to touch HTML or CSS.
+```
+index.html   ← everything: markup, styles, and script, in one file
+```
 
-Open `index.html`, find the `poems` array near the top of the `<script>` tag, and edit the entries directly. Each poem follows this shape:
+## Adding a new poem
+
+Poems are hardcoded in the `poems` array near the top of the `<script>` tag — no admin panel, no database entry needed. Open `index.html`, find the array, and copy an existing poem block:
 
 ```js
 {
-  id: 1,
-  genre: "love",          // one of: love | sad | faith | nature | hope
-  title: "Where You Are",
-  excerpt: "A short teaser line shown on the card.",
-  body: `The full poem,
-  line by line,
-  exactly as you want it to appear.`,
-  note: "An optional plain-English explanation of the poem's meaning."
-}
+  id: 5,                     // must be unique — use the next number
+  genre: "hope",             // one of: love | melancholy | faith | Philosophical | Introspective
+  title: "Your Poem Title",
+  excerpt: "First line or two,\nshown on the card preview.",
+  body: "Full poem text.\nUse \\n for line breaks.",
+  note: "Optional: what this poem means. Delete this line to hide the button."
+},
 ```
 
-To add a new poem, copy an existing block, give it a new `id`, and fill in your own text. To add a new genre, also add it to the `genreLabels` object and to the filter tabs in the HTML (`<nav class="genre-nav">`).
+Paste it just before the closing `]` of the array (remembering the comma after the previous poem), save, and push.
 
-## Running locally
+## Firebase setup (one-time)
 
-No build step — it's a single static HTML file.
+1. **Enable Firestore**
+   Firebase console → Build → Firestore Database → Create database → pick a nearby region → start in test mode.
 
-```bash
-git clone https://github.com/YOUR_USERNAME/souls-whisper.git
-cd souls-whisper
-open index.html   # or just double-click the file
-```
+2. **Publish these security rules** (Firestore → Rules tab):
 
-## Publishing with GitHub Pages
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
 
-1. Push this repo to GitHub.
-2. Go to **Settings → Pages**.
-3. Under **Source**, select the `main` branch and `/ (root)`.
-4. Save — your site will be live at `https://YOUR_USERNAME.github.io/souls-whisper/` within a minute or two.
+       match /likes/{poemId} {
+         allow read: if true;
+         allow create, update: if request.resource.data.count is int;
+         allow delete: if false;
+       }
 
-## License
+       match /comments/{commentId} {
+         allow read: if true;
+         allow create: if request.resource.data.text is string
+                       && request.resource.data.text.size() > 0
+                       && request.resource.data.text.size() < 1000
+                       && request.resource.data.name is string
+                       && request.resource.data.poemId is string;
+         allow update, delete: if false;
+       }
 
-This project's code is free to use and adapt. The poems themselves are personal writing — please don't republish them elsewhere without asking.
+       match /subscribers/{subscriberId} {
+         allow read: if false;
+         allow create: if request.resource.data.email is string
+                       && request.resource.data.email.size() > 3
+                       && request.resource.data.email.size() < 200;
+         allow update, delete: if false;
+       }
+     }
+   }
+   ```
+
+3. **Swap in your own Firebase config** at the top of the `<script>` tag (`firebaseConfig` object) — get this from Firebase console → Project settings → your web app.
+
+No Firebase Authentication is used. Likes, comments, and subscriptions are all open to anonymous visitors by design, gated only by the rules above.
+
+## Notifying subscribers of a new poem
+
+There's no automated "email on publish" step — Firestore + a static page can't safely send email on their own. When you publish a new poem:
+
+1. Go to Firebase console → Firestore Database → Data → `subscribers`
+2. Copy the email addresses
+3. Send a quick update yourself via any free email tool (Mailchimp, Brevo, MailerLite, or just your own inbox)
+
+If this becomes a regular chore, a Cloud Function + an email API (SendGrid/Resend) can automate it — that requires Firebase's paid Blaze plan (usage would very likely stay in the free tier) and some backend code, which is a bigger step than this project currently takes.
+
+## Local testing
+
+Don't open `index.html` by double-clicking it — `file://` URLs block Firebase's network requests. Instead:
+
+- **VS Code**: install the "Live Server" extension, right-click the file → "Open with Live Server"
+- **Python**: `python -m http.server 8000` in the project folder, then visit `http://localhost:8000/index.html`
+- Or just push to GitHub Pages and test the live URL
+
+## Deploying
+
+Push `index.html` (and this `README.md`) to a GitHub repository, then enable **GitHub Pages** in the repo's Settings → Pages, pointing at the branch and root folder. No build step required.
+
+## Known limitations
+
+- Likes and views have no per-person limit — anyone can like a poem multiple times
+- Comments can't be edited or deleted by visitors, and there's no moderation panel — delete unwanted ones directly in the Firestore console if needed
+- Subscriber notifications are manual (see above)
+- No duplicate-check on subscriber emails — the same address can be submitted more than once
