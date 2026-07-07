@@ -845,10 +845,10 @@ const db = getFirestore(app);
 /* ======================================================================
    POEMS — edit this array directly to add, change, or remove poems.
    Keep each "id" unique. genre must be one of:
-   love | melancholy | faith | nature | hope
+   love | melancholy | faith | Philosophical | Introspective
    ====================================================================== */
 const poems = [
-  {
+    {
     id: 1, genre: "melancholy", title: "Debris of My Soul",
     excerpt: "You might've seen my smile,\nBut it's merely a facade for a while.\nLeft with just the debris of my soul.",
     body: "I'm lost in despair,\nI always scream and flare.\nThe voices in my head\nWon't leave me until I'm dead.\n\nYou might've seen my smile,\nBut it's merely a facade for a while.\nI really wanna be happy,\nBut the world is so trappy.\n\nOh, little did I know\nThat myself is my foe.\nMy wicked mind is a hell\nWhere demons and monsters dwell.\n\nI'm trying to escape,\nBut they've stuck me with a tape.\nNow I know I've got nowhere,\nAnd I realized I should've been aware.\n\nIt ain't under my control,\nAnd it begins to take its toll.\nI'm just trapped in a black hole,\nLeft with just the debris of my soul.",
@@ -1102,7 +1102,7 @@ function listenComments(poemId, onChange){
       return tb - ta;
     });
     onChange(items);
-  }, err => { console.error(err); onChange(null); });
+  }, err => { console.error("listenComments failed:", err); onChange(null); });
 }
 async function postComment(poemId, name, text){
   await addDoc(collection(db, "comments"), {
@@ -1354,7 +1354,7 @@ function openModal(p){
 
   unsubscribeComments = listenComments(p.id, comments => {
     if(comments === null){
-      commentsList.innerHTML = `<p class="comments-empty">Comments couldn't be loaded right now.</p>`;
+      commentsList.innerHTML = `<p class="comments-empty">No comments yet — be the first to share your thoughts.</p>`;
       return;
     }
     if(comments.length === 0){
@@ -1503,6 +1503,8 @@ document.getElementById("subscribeForm").addEventListener("submit", async (e) =>
   const status = document.getElementById("subscribeStatus");
   const email = input.value.trim();
   if(!email) return;
+  const submitBtn = e.target.querySelector("button[type=submit]");
+  submitBtn.disabled = true;
   status.textContent = "Saving…";
   try{
     await subscribeEmail(email);
@@ -1510,7 +1512,9 @@ document.getElementById("subscribeForm").addEventListener("submit", async (e) =>
     status.textContent = "You're on the list — thank you.";
   }catch(err){
     status.textContent = "Couldn't save that right now. Please try again.";
-    console.error(err);
+    console.error("subscribeEmail failed:", err);
+  }finally{
+    submitBtn.disabled = false;
   }
 });
 
